@@ -72,6 +72,10 @@ $transitions: (
   }
 }
 
+.btn-handler {
+  display: none;
+}
+
 .btn {
   display: flex;
   align-items: center;
@@ -161,9 +165,6 @@ $transitions: (
   transform: translate(-50%, -50%);
   padding: 20px;
   &__fields {
-  }
-  &__btn-handler {
-    display: none;
   }
   &__btns {
     display: flex;

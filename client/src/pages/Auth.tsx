@@ -120,7 +120,7 @@ const Auth: React.FC = () => {
       <div className='auth-form'>
         <form onSubmit={handleSubmit} className='auth-form__fields'>
           {fields}
-          <button className='auth-form__btn-handler'></button>
+          <button className='btn-handler'></button>
         </form>
         <div className='auth-form__btns'>
           <button
