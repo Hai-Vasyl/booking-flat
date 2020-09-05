@@ -1,0 +1,159 @@
+$colors: (
+  secondary: rgb(215, 215, 215),
+  primary: #333,
+  danger: hsl(0, 90%, 51%),
+  success: rgb(52, 174, 52),
+  spinner: rgba(51, 51, 51, 0.5),
+  bg-light: rgba(211, 211, 211, 0.5),
+  light-dark-night: lighten(#333, 15%),
+  light-dark: lighten(#333, 10%),
+  light-night: lighten(#333, 15%),
+  main: rgb(239, 240, 240),
+  accent: white,
+  focus: #4287f59e,
+  main-solid: rgb(230, 230, 230),
+  bg-danger: rgba(241, 42, 42, 0.2),
+  link: rgb(13, 52, 130),
+  loader: rgba(255, 255, 255, 0.489),
+);
+$box-shadows: (
+  button: (
+    0px 4px 6px rgba(51, 51, 51, 0.5),
+  ),
+);
+$transitions: (
+  sudden: 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+  smooth: 0.25s ease,
+  spin: 1s linear infinite,
+);
+
+@function getColor($color-name) {
+  @return map-get($colors, $color-name);
+}
+@function getTransition($transition-name) {
+  @return map-get($transitions, $transition-name);
+}
+@function getShadows($shadow-name) {
+  @return map-get($box-shadows, $shadow-name);
+}
+
+.wrapper {
+  width: 1300px;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0px 50px;
+  border-left: 1px solid getColor(secondary);
+  border-right: 1px solid getColor(secondary);
+  min-height: 100vh;
+  position: relative;
+}
+
+.title {
+  &__name {
+  }
+  &__description {
+  }
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  border: 1px solid transparent;
+  outline: none;
+  transition: getTransition(smooth);
+  &__name {
+    margin: 0px 4px;
+  }
+  &__icon {
+    margin: 0px 4px;
+  }
+  &:hover {
+    box-shadow: getShadows(button);
+  }
+  &:active {
+    transform: scale(0.9);
+  }
+}
+.btn-primary {
+  background-color: getColor(primary);
+  color: getColor(accent);
+  border-color: getColor(primary);
+}
+.btn-simple {
+  border-color: getColor(secondary);
+}
+
+.field {
+  display: block;
+  // border: 1px solid black;
+  margin-bottom: 1em;
+  &--close {
+    display: none;
+  }
+  &__name {
+    display: block;
+    padding: 5px 0;
+  }
+  &__input {
+    border: 1px solid getColor(secondary);
+    width: 100%;
+    padding: 6px;
+    transition: getTransition(smooth);
+    outline: 2px solid transparent;
+    outline-offset: 1px;
+    &--error {
+      border-color: getColor(danger);
+    }
+    &:focus {
+      outline-color: getColor(focus);
+    }
+  }
+}
+
+.error {
+  color: getColor(danger);
+  font-size: 0.85em;
+  padding: 3px 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  visibility: hidden;
+  opacity: 0;
+  transition: getTransition(smooth);
+  height: 23px;
+  &--active {
+    visibility: visible;
+    opacity: 1;
+  }
+  &__icon {
+  }
+  &__name {
+    margin-right: 6px;
+  }
+}
+
+.auth-form {
+  position: absolute;
+  width: 450px;
+  max-width: 100%;
+  top: 50%;
+  left: 50%;
+  border: 1px solid getColor(secondary);
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  &__fields {
+  }
+  &__btn-handler {
+    display: none;
+  }
+  &__btns {
+    display: flex;
+    justify-content: center;
+    padding-top: 0.2em;
+  }
+  &__btn {
+    margin-right: 12px;
+  }
+}
