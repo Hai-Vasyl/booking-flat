@@ -2,6 +2,7 @@ export const FETCH_START_AUTH = "FETCH_START_AUTH"
 export const FETCH_SUCCESS_AUTH = "FETCH_SUCCESS_AUTH"
 export const FETCH_FAILURE_AUTH = "FETCH_FAILURE_AUTH"
 export const CLEAR_ERROR_AUTH = "CLEAR_ERROR_AUTH"
+export const SET_AUTH = "SET_AUTH"
 
 export type SuccessPayloadAuth = {
   token: string
@@ -44,9 +45,13 @@ export interface ClearErrorAuth {
   payload: string
 }
 
+export interface SetAuth {
+  type: typeof SET_AUTH
+}
+
 export type AuthDispatchTypes =
   | FetchStartAuth
   | FetchSuccessAuth
   | FetchFailureAuth
 
-export type AuthReducerTypes = AuthDispatchTypes | ClearErrorAuth
+export type AuthReducerTypes = AuthDispatchTypes | ClearErrorAuth | SetAuth

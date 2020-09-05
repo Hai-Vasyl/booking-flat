@@ -5,6 +5,7 @@ import {
   FETCH_SUCCESS_AUTH,
   FETCH_FAILURE_AUTH,
   CLEAR_ERROR_AUTH,
+  SET_AUTH,
   AuthReducerTypes,
 } from "./authTypes"
 
@@ -65,6 +66,14 @@ const authReducer = (
       return {
         ...state,
         errors,
+      }
+    case SET_AUTH:
+      const auth: SuccessPayloadAuth = JSON.parse(
+        localStorage.getItem("auth") || JSON.stringify(initialState)
+      )
+      return {
+        ...state,
+        userData: auth,
       }
     default:
       return state

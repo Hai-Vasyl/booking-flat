@@ -22,6 +22,8 @@ const startServer = async () => {
     )
 
     app.use("/auth", require("./api/routes/users"))
+    // app.use("/vouchers", require("./api/routes/users"))
+    app.use("/apartments", require("./api/routes/apartments"))
 
     app.listen(PORT, () => console.log(`Server started on port: ${PORT}`))
   } catch (error) {
