@@ -16,4 +16,4 @@ const schema = new Schema({
   statusActive: { type: Boolean, required: true, default: true },
 })
 
-module.exprots = model("Voucher", schema)
+module.exports = model("Voucher", schema)

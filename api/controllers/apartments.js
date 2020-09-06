@@ -39,7 +39,7 @@ exports.apartment_create = async (req, res) => {
 
     res.json("Apartment created!")
   } catch (error) {
-    res.status(400).json(`Apartment creating error: ${error.messsage}`)
+    res.status(400).json(`Apartment creating error: ${error.message}`)
   }
 }
 

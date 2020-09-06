@@ -11,4 +11,4 @@ const schema = new Schema({
   vouchers: [{ type: Types.ObjectId, ref: "Voucher" }],
 })
 
-module.exprots = model("Apartment", schema)
+module.exports = model("Apartment", schema)
