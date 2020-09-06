@@ -7,6 +7,6 @@ const {
 } = require("../controllers/apartments")
 
 router.post("/create", auth, apartment_create)
-router.post(`/edit/${apartmentId}`, auth, apartment_update)
+router.post("/edit/:apartmentId", auth, apartment_update)
 
 module.exports = router

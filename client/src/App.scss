@@ -108,14 +108,29 @@ $transitions: (
 
 .field {
   display: block;
-  // border: 1px solid black;
-  margin-bottom: 1em;
+  // margin-bottom: 0.5em;
   &--close {
     display: none;
   }
   &__name {
     display: block;
     padding: 5px 0;
+  }
+  &__date-name {
+    text-transform: capitalize;
+  }
+  &__date {
+    padding: 0px 8px;
+    height: 34px;
+    border-radius: 0;
+    border: 1px solid getColor(secondary);
+    border-right-color: transparent;
+    outline: 2px solid transparent;
+    position: relative;
+    &:focus {
+      z-index: 2;
+      outline-color: getColor(focus);
+    }
   }
   &__input {
     border: 1px solid getColor(secondary);
@@ -173,5 +188,128 @@ $transitions: (
   }
   &__btn {
     margin-right: 12px;
+  }
+}
+
+.plug-img {
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: getColor(secondary);
+  &__icon {
+    font-size: 5em;
+  }
+  &__name {
+  }
+}
+
+.form-flat {
+  display: flex;
+  border: 1px solid getColor(secondary);
+  &__btn-tab {
+    border: 1px solid transparent;
+    border-right: 1px solid getColor(secondary);
+    &:hover {
+      box-shadow: none;
+      border-bottom-color: getColor(secondary);
+    }
+    &:active {
+      transform: none;
+    }
+    &--active {
+      border-bottom-color: getColor(danger);
+      &:hover {
+        border-bottom-color: getColor(danger);
+      }
+    }
+  }
+  &__container {
+    width: 50%;
+    min-height: 50vh;
+    border-right: 1px solid getColor(secondary);
+  }
+  &__btns {
+    display: flex;
+    border-bottom: 1px solid getColor(secondary);
+  }
+  &__image-side {
+    width: 50%;
+    padding: 20px;
+    display: flex;
+  }
+  &__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  &__page {
+    padding: 20px;
+    display: none;
+    &--active {
+      display: block;
+    }
+  }
+  &__btn-go {
+    margin-top: 1em;
+    margin-left: auto;
+  }
+  &__date {
+    display: flex;
+    align-items: flex-end;
+    // border: 1px solid black;
+    // justify-content: space-between;
+  }
+  &__btn-add-time {
+    height: 34px;
+    margin-bottom: 23px;
+    outline: none;
+    flex: 1;
+    display: flex;
+    background-color: getColor(primary);
+    color: getColor(accent);
+    font-size: 1.1em;
+    transition: getTransition(smooth);
+    &:active {
+      transform: scale(0.9);
+    }
+    &--disabled {
+      background-color: getColor(secondary);
+      &:active {
+        transform: none;
+      }
+    }
+    & > * {
+      margin: auto;
+    }
+  }
+}
+
+.time-slot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid getColor(secondary);
+  border-bottom-color: transparent;
+  padding: 5px;
+  &:last-child {
+    border-bottom-color: getColor(secondary);
+  }
+  &__date {
+    border: 1px solid getColor(secondary);
+    padding: 4px 10px;
+    border-radius: 5px;
+  }
+  &__btn-delete {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid getColor(secondary);
+    display: flex;
+    & > * {
+      margin: auto;
+    }
   }
 }
