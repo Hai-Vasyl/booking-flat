@@ -78,16 +78,29 @@ exports.apartment_update = async (req, res) => {
       image,
       price,
       numberRooms,
-      timeRange: idTimeRanges,
+      $set: { timeRanges: idTimeRanges },
     })
 
     // await Apartment.findByIdAndUpdate(apartmentId, {
-    //   $pull: { timeRanges: announcement },
+    //   $set: { timeRanges: idTimeRanges },
     // })
-    // apartment = await apartment.save()
 
     res.json("Apartment updated!")
   } catch (error) {
     res.status(400).json(`Apartment editing error: ${error.messsage}`)
+  }
+}
+
+exports.apartment_get = async (req, res) => {
+  try {
+    const { apartmentId } = req.params
+
+    const apartment = await Apartment.findById(apartmentId).populate({
+      path: "timeRanges",
+    })
+
+    res.json(apartment)
+  } catch (error) {
+    res.status(400).json(`Apartment getting error: ${error.messsage}`)
   }
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import { AiOutlineWarning } from "react-icons/ai"
 import {
@@ -32,13 +32,24 @@ interface TimeRange {
 }
 
 interface TimeSlots {
-  id: number
+  _id: number
   settlement: string
   eviction: string
 }
 
 type StatusDates = {
   status: boolean
+}
+
+type ResponseTimeRange = {
+  bookedStatus: boolean
+  _id: string
+  name: string
+  settlement: string
+  eviction: string
+  apartment: string
+  owner: string
+  __v?: number
 }
 
 const CreateEditFlat: React.FC = () => {
@@ -66,6 +77,41 @@ const CreateEditFlat: React.FC = () => {
   const {
     auth: { userData },
   } = useSelector((state: RootStore) => state)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios({
+          url: `/apartments/get/${flatId}`,
+          method: "get",
+          data: null,
+        })
+
+        const apartmentData = res.data
+
+        setForm((prevForm) =>
+          prevForm.map((item) => {
+            return { ...item, value: apartmentData[item.param] }
+          })
+        )
+
+        setTimeRanges(
+          apartmentData.timeRanges.map((item: ResponseTimeRange) => {
+            return {
+              ...item,
+              settlement: item.settlement.slice(0, 10),
+              eviction: item.eviction.slice(0, 10),
+            }
+          })
+        )
+      } catch (error) {}
+    }
+
+    if (!flatId) {
+      return
+    }
+    fetchData()
+  }, [flatId])
 
   const onFlip = (
     event:
@@ -174,7 +220,7 @@ const CreateEditFlat: React.FC = () => {
       {
         settlement: settlement.value,
         eviction: eviction.value,
-        id: Date.now(),
+        _id: Date.now(),
       },
     ])
   }
@@ -182,30 +228,32 @@ const CreateEditFlat: React.FC = () => {
   const handleSubmit = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    event.preventDefault()
+    try {
+      event.preventDefault()
 
-    let dataApartment: { [key: string]: string } = {
-      name: "",
-      description: "",
-      image: "",
-      price: "",
-      numberRooms: "",
-    }
+      let dataApartment: { [key: string]: string } = {
+        name: "",
+        description: "",
+        image: "",
+        price: "",
+        numberRooms: "",
+      }
 
-    form.forEach((item) => {
-      dataApartment[item.param] = item.value
-    })
+      form.forEach((item) => {
+        dataApartment[item.param] = item.value
+      })
 
-    const res = await axios({
-      url: "/apartments/create",
-      method: "post",
-      data: { ...dataApartment, timeRanges },
-      headers: userData && {
-        Authorization: `Basic ${userData.token}`,
-      },
-    })
+      const res = await axios({
+        url: flatId ? `/apartments/update/${flatId}` : "/apartments/create",
+        method: "post",
+        data: { ...dataApartment, timeRanges },
+        headers: userData && {
+          Authorization: `Basic ${userData.token}`,
+        },
+      })
 
-    console.log(res.data)
+      console.log(res.data)
+    } catch (error) {}
   }
 
   const getImage = () => {
@@ -220,7 +268,7 @@ const CreateEditFlat: React.FC = () => {
 
   const handleDeleteSlot = (id: number) => {
     setTimeRanges((prevTimeRanges) =>
-      prevTimeRanges.filter((item) => item.id !== id)
+      prevTimeRanges.filter((item) => item._id !== id)
     )
   }
 
@@ -261,12 +309,12 @@ const CreateEditFlat: React.FC = () => {
 
   const timeRangeSlots = timeRanges.map((item) => {
     return (
-      <div key={item.id} className='time-slot'>
+      <div key={item._id} className='time-slot'>
         <span className='time-slot__date'>{item.settlement}</span>-
         <span className='time-slot__date'>{item.eviction}</span>
         <button
           className='time-slot__btn-delete'
-          onClick={() => handleDeleteSlot(item.id)}
+          onClick={() => handleDeleteSlot(item._id)}
         >
           <BsX />
         </button>
