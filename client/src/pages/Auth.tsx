@@ -103,8 +103,8 @@ const Auth: React.FC = () => {
           name={item.param}
         />
         <span className={`error ${msg && "error--active"}`}>
-          <span className='error__name'>{msg}</span>
           <AiOutlineWarning className='error__icon' />
+          <span className='error__name'>{msg}</span>
         </span>
       </label>
     )

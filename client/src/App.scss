@@ -20,6 +20,9 @@ $box-shadows: (
   button: (
     0px 4px 6px rgba(51, 51, 51, 0.5),
   ),
+  light: (
+    0px 2px 4px rgba(51, 51, 51, 0.1),
+  ),
 );
 $transitions: (
   sudden: 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
@@ -154,7 +157,6 @@ $transitions: (
   padding: 3px 0;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
   visibility: hidden;
   opacity: 0;
   transition: getTransition(smooth);
@@ -166,7 +168,7 @@ $transitions: (
   &__icon {
   }
   &__name {
-    margin-right: 6px;
+    margin-left: 6px;
   }
 }
 
@@ -259,12 +261,10 @@ $transitions: (
   &__date {
     display: flex;
     align-items: flex-end;
-    // border: 1px solid black;
-    // justify-content: space-between;
+    flex-wrap: wrap;
   }
   &__btn-add-time {
     height: 34px;
-    margin-bottom: 23px;
     outline: none;
     flex: 1;
     display: flex;
@@ -285,15 +285,45 @@ $transitions: (
       margin: auto;
     }
   }
+  &__error {
+    height: 23px;
+    width: 100%;
+  }
+  &__container-slots {
+    height: 25vh;
+    background-color: getColor(bg-light);
+    overflow: hidden;
+    border-radius: 5px;
+    border: 1px solid getColor(secondary);
+    margin-top: 1em;
+    box-shadow: inset getShadows(light);
+  }
+  &__btns-submit {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 38px;
+  }
+  &__btn-apply {
+    &--disabled {
+      background-color: getColor(secondary);
+      border-color: getColor(secondary);
+      &:hover {
+        box-shadow: none;
+      }
+      &:active {
+        transform: none;
+      }
+    }
+  }
 }
 
 .time-slot {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  border: 1px solid getColor(secondary);
-  border-bottom-color: transparent;
-  padding: 5px;
+  border-bottom: 1px solid getColor(secondary);
+  padding: 7px;
+  background-color: getColor(accent);
+  box-shadow: getShadows(light);
   &:last-child {
     border-bottom-color: getColor(secondary);
   }
@@ -301,13 +331,18 @@ $transitions: (
     border: 1px solid getColor(secondary);
     padding: 4px 10px;
     border-radius: 5px;
+    width: 120px;
+    text-align: center;
+    margin: 0px 4px;
   }
   &__btn-delete {
     width: 30px;
     height: 30px;
+    outline: none;
     border-radius: 50%;
     border: 1px solid getColor(secondary);
     display: flex;
+    margin-left: auto;
     & > * {
       margin: auto;
     }

@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom"
 import { AiOutlineWarning } from "react-icons/ai"
 import {
   BsArrowRight,
+  BsArrowLeft,
   BsCalendar,
   BsLayoutTextSidebar,
   BsCheck,
@@ -10,6 +11,9 @@ import {
   BsCardImage,
   BsX,
 } from "react-icons/bs"
+import axios from "axios"
+import { useSelector } from "react-redux"
+import { RootStore } from "../redux/store"
 
 interface PropsParams {
   flatId: string
@@ -24,18 +28,23 @@ interface FormItem {
 
 interface TimeRange {
   param: string
-  msg: string
   value: string
 }
 
 interface TimeSlots {
+  id: number
   settlement: string
   eviction: string
+}
+
+type StatusDates = {
+  status: boolean
 }
 
 const CreateEditFlat: React.FC = () => {
   const { flatId } = useParams<PropsParams>()
   const [isFormFlipped, setIsFormFlipped] = useState(false)
+  const [message, setMessage] = useState("")
   const [form, setForm] = useState<FormItem[]>([
     { param: "name", msg: "", name: "Name", value: "" },
     { param: "description", msg: "", name: "Description", value: "" },
@@ -46,17 +55,17 @@ const CreateEditFlat: React.FC = () => {
   const [timeForm, setTimeForm] = useState<TimeRange[]>([
     {
       param: "settlement",
-      msg: "",
       value: "",
     },
     {
       param: "eviction",
-      msg: "",
       value: "",
     },
   ])
-
   const [timeRanges, setTimeRanges] = useState<TimeSlots[]>([])
+  const {
+    auth: { userData },
+  } = useSelector((state: RootStore) => state)
 
   const onFlip = (
     event:
@@ -103,7 +112,7 @@ const CreateEditFlat: React.FC = () => {
     itemDateRange: string,
     isSettlement: boolean
   ) => {
-    const statusDates = timeForm.map((item) => {
+    const statusDates: StatusDates[] = timeForm.map((item) => {
       const itemToDate = new Date(item.value)
       const status = isSettlement
         ? itemToDate < new Date(itemDateRange)
@@ -122,8 +131,6 @@ const CreateEditFlat: React.FC = () => {
         checkEachFormDateParam(item.settlement, true) ||
         checkEachFormDateParam(item.eviction, false)
       ) {
-        // console.log(checkEachFormDateParam(item.settlement, true))
-        // console.log(checkEachFormDateParam(item.eviction, false))
         return
       } else {
         isNotRepeating = false
@@ -140,9 +147,10 @@ const CreateEditFlat: React.FC = () => {
       timeForm.map((item) => {
         if (item.param === name) {
           if (new Date(value) <= new Date()) {
-            return { ...item, msg: "Not valid date!" }
+            setMessage(`Wrong ${name} date!`)
           } else {
-            return { ...item, value, msg: "" }
+            setMessage("")
+            return { ...item, value }
           }
         }
         return item
@@ -153,21 +161,51 @@ const CreateEditFlat: React.FC = () => {
   const handleAddTime = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    if (!checkDateRepeating()) {
-      console.log("Repeat!!!!!")
-      return
-    }
-
     const [settlement, eviction] = timeForm
+    if (new Date(settlement.value) >= new Date(eviction.value)) {
+      return setMessage("Not appropriate dates!")
+    }
+    if (!checkDateRepeating()) {
+      return setMessage("Duplicate or incorrect date ranges found!")
+    }
+    setMessage("")
     setTimeRanges((prevTimeRanges) => [
-      { settlement: settlement.value, eviction: eviction.value },
       ...prevTimeRanges,
+      {
+        settlement: settlement.value,
+        eviction: eviction.value,
+        id: Date.now(),
+      },
     ])
   }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     event.preventDefault()
-    console.log(form)
+
+    let dataApartment: { [key: string]: string } = {
+      name: "",
+      description: "",
+      image: "",
+      price: "",
+      numberRooms: "",
+    }
+
+    form.forEach((item) => {
+      dataApartment[item.param] = item.value
+    })
+
+    const res = await axios({
+      url: "/apartments/create",
+      method: "post",
+      data: { ...dataApartment, timeRanges },
+      headers: userData && {
+        Authorization: `Basic ${userData.token}`,
+      },
+    })
+
+    console.log(res.data)
   }
 
   const getImage = () => {
@@ -178,6 +216,12 @@ const CreateEditFlat: React.FC = () => {
       }
     })
     return src
+  }
+
+  const handleDeleteSlot = (id: number) => {
+    setTimeRanges((prevTimeRanges) =>
+      prevTimeRanges.filter((item) => item.id !== id)
+    )
   }
 
   const timeForms = timeForm.map((item) => {
@@ -191,10 +235,6 @@ const CreateEditFlat: React.FC = () => {
           value={item.value}
           onChange={handleChangeDate}
         />
-        <span className={`error ${item.msg && "error--active"}`}>
-          <span className='error__name'>{item.msg}</span>
-          <AiOutlineWarning className='error__icon' />
-        </span>
       </label>
     )
   })
@@ -212,8 +252,8 @@ const CreateEditFlat: React.FC = () => {
           autoComplete='off'
         />
         <span className={`error ${item.msg && "error--active"}`}>
-          <span className='error__name'>{item.msg}</span>
           <AiOutlineWarning className='error__icon' />
+          <span className='error__name'>{item.msg}</span>
         </span>
       </label>
     )
@@ -221,10 +261,13 @@ const CreateEditFlat: React.FC = () => {
 
   const timeRangeSlots = timeRanges.map((item) => {
     return (
-      <div key={item.eviction} className='time-slot'>
+      <div key={item.id} className='time-slot'>
         <span className='time-slot__date'>{item.settlement}</span>-
         <span className='time-slot__date'>{item.eviction}</span>
-        <button className='time-slot__btn-delete'>
+        <button
+          className='time-slot__btn-delete'
+          onClick={() => handleDeleteSlot(item.id)}
+        >
           <BsX />
         </button>
       </div>
@@ -278,7 +321,7 @@ const CreateEditFlat: React.FC = () => {
           >
             {fields}
             <button className='form-flat__btn-go btn btn-primary'>
-              <span className='btn__name'>Go forward</span>
+              <span className='btn__name'>Move forward</span>
               <BsArrowRight className='btn__icon' />
             </button>
           </form>
@@ -297,15 +340,27 @@ const CreateEditFlat: React.FC = () => {
               >
                 <BsPlus />
               </button>
+              <span
+                className={`form-flat__error error ${
+                  message && "error--active"
+                }`}
+              >
+                <AiOutlineWarning className='error__icon' />
+                <span className='error__name'>{message}</span>
+              </span>
             </div>
-            <div>{timeRangeSlots}</div>
-            <div>
+            <div className='form-flat__container-slots'>{timeRangeSlots}</div>
+            <div className='form-flat__btns-submit'>
               <button className='btn btn-primary'>
-                <span className='btn__name'>Go back</span>
-                <BsArrowRight className='btn__icon' />
+                <BsArrowLeft className='btn__icon' />
+                <span className='btn__name'>Move back</span>
               </button>
-
-              <button className='btn btn-primary'>
+              <button
+                className={`form-flat__btn-apply btn btn-primary ${
+                  !timeRanges.length && "form-flat__btn-apply--disabled"
+                }`}
+                onClick={timeRanges.length ? handleSubmit : () => {}}
+              >
                 <BsCheck className='btn__icon' />
                 <span className='btn__name'>Submit</span>
               </button>
