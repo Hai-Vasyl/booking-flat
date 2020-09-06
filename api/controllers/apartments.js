@@ -1,5 +1,6 @@
 const Apartment = require("../models/Apartment")
 const TimeRange = require("../models/TimeRange")
+const Voucher = require("../models/Voucher")
 
 exports.apartment_create = async (req, res) => {
   try {
@@ -102,5 +103,19 @@ exports.apartment_get = async (req, res) => {
     res.json(apartment)
   } catch (error) {
     res.status(400).json(`Apartment getting error: ${error.messsage}`)
+  }
+}
+
+exports.apartment_delete = async (req, res) => {
+  try {
+    const { apartmentId } = req.params
+
+    await Apartment.findByIdAndDelete(apartmentId)
+    await TimeRange.deleteMany({ apartment: apartmentId })
+    await Voucher.deleteMany({ apartment: apartmentId })
+
+    res.json("Apartment deleted!")
+  } catch (error) {
+    res.status(400).json(`Apartment deleting error: ${error.messsage}`)
   }
 }

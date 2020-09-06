@@ -257,6 +257,9 @@ $transitions: (
   &__btn-go {
     margin-top: 1em;
     margin-left: auto;
+    &-left {
+      margin-right: auto;
+    }
   }
   &__date {
     display: flex;
@@ -300,7 +303,7 @@ $transitions: (
   }
   &__btns-submit {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     padding-top: 38px;
   }
   &__btn-apply {

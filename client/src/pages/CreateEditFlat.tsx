@@ -6,10 +6,12 @@ import {
   BsArrowLeft,
   BsCalendar,
   BsLayoutTextSidebar,
-  BsCheck,
   BsPlus,
   BsCardImage,
   BsX,
+  BsPlusSquare,
+  BsTrash,
+  BsPencilSquare,
 } from "react-icons/bs"
 import axios from "axios"
 import { useSelector } from "react-redux"
@@ -123,6 +125,7 @@ const CreateEditFlat: React.FC = () => {
 
     if (isMainForm) {
       setIsFormFlipped(false)
+      setMessage("")
     } else {
       let isEmptyField: boolean = false
       setForm(
@@ -230,7 +233,7 @@ const CreateEditFlat: React.FC = () => {
   ) => {
     try {
       event.preventDefault()
-
+      setMessage("")
       let dataApartment: { [key: string]: string } = {
         name: "",
         description: "",
@@ -270,6 +273,21 @@ const CreateEditFlat: React.FC = () => {
     setTimeRanges((prevTimeRanges) =>
       prevTimeRanges.filter((item) => item._id !== id)
     )
+  }
+
+  const handleDelete = async () => {
+    try {
+      const res = await axios({
+        url: `/apartments/delete/${flatId}`,
+        method: "delete",
+        data: null,
+        headers: userData && {
+          Authorization: `Basic ${userData.token}`,
+        },
+      })
+
+      console.log(res.data)
+    } catch (error) {}
   }
 
   const timeForms = timeForm.map((item) => {
@@ -399,18 +417,31 @@ const CreateEditFlat: React.FC = () => {
             </div>
             <div className='form-flat__container-slots'>{timeRangeSlots}</div>
             <div className='form-flat__btns-submit'>
-              <button className='btn btn-primary'>
+              <button
+                className='form-flat__btn-go-left btn btn-primary'
+                onClick={(event) => onFlip(event, true)}
+              >
                 <BsArrowLeft className='btn__icon' />
                 <span className='btn__name'>Move back</span>
               </button>
+              {flatId && (
+                <button className='btn btn-simple' onClick={handleDelete}>
+                  <BsTrash className='btn__icon' />
+                  <span className='btn__name'>Delete</span>
+                </button>
+              )}
               <button
                 className={`form-flat__btn-apply btn btn-primary ${
                   !timeRanges.length && "form-flat__btn-apply--disabled"
                 }`}
                 onClick={timeRanges.length ? handleSubmit : () => {}}
               >
-                <BsCheck className='btn__icon' />
-                <span className='btn__name'>Submit</span>
+                {flatId ? (
+                  <BsPencilSquare className='btn__icon' />
+                ) : (
+                  <BsPlusSquare className='btn__icon' />
+                )}
+                <span className='btn__name'>{flatId ? "Edit" : "Create"}</span>
               </button>
             </div>
           </div>
