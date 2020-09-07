@@ -15,26 +15,33 @@ import {
   Switch,
   Redirect,
 } from "react-router-dom"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import { RootStore } from "../redux/store"
+import { RESET_MENU } from "../redux/menu/menuTypes"
 
 const Routes: React.FC = () => {
   const {
     auth: { userData },
+    menu: { drop },
   } = useSelector((state: RootStore) => state)
+  const dispatch = useDispatch()
 
   return (
     <Router>
       <Navbar />
+      <div
+        onClick={() => dispatch({ type: RESET_MENU })}
+        className={`background-popup ${drop && "background-popup--active"}`}
+      ></div>
       {userData.token ? (
         userData.user.typeUser === "admin" ? (
           <Switch>
             <Route exact path='/' component={Main} />
             <Route path='/create-flat' component={CreateEditFlat} />
-            <Route path='/orders-vouchers' component={OrderBookings} />
-            <Route exact path='/user' component={User} />
+            <Route path='/orders' component={OrderBookings} />
 
-            <Route path='/filter/:filterString' component={Filter} />
+            <Route path='/filter/vouchers/:filterString' component={Filter} />
+            <Route path='/filter/flats/:filterString' component={Filter} />
             <Route path='/edit-flat/:flatId' component={CreateEditFlat} />
             <Route path='/create-voucher/:id' component={CreateEditVoucher} />
             <Route path='/edit-voucher/:id' component={CreateEditVoucher} />
@@ -48,7 +55,7 @@ const Routes: React.FC = () => {
           </Switch>
         ) : (
           <Switch>
-            <Route exact path='/' component={Main} />
+            {/* <Route exact path='/' component={Main} />
             <Route path='/create-flat' component={CreateEditFlat} />
             <Route path='/orders-vouchers' component={OrderBookings} />
             <Route exact path='/user' component={User} />
@@ -63,7 +70,7 @@ const Routes: React.FC = () => {
               component={DetailsVoucher}
             />
             <Route path='/user/:userId' component={User} />
-            <Redirect to='/' />
+            <Redirect to='/' /> */}
           </Switch>
         )
       ) : (

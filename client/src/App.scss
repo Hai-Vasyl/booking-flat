@@ -1,10 +1,12 @@
 $colors: (
   secondary: rgb(215, 215, 215),
   primary: #333,
+  light-primary: lighten(#333, 5%),
   danger: hsl(0, 90%, 51%),
   success: rgb(52, 174, 52),
   spinner: rgba(51, 51, 51, 0.5),
   bg-light: rgba(211, 211, 211, 0.5),
+  bg-dark: rgba(0, 0, 0, 0.3),
   light-dark-night: lighten(#333, 15%),
   light-dark: lighten(#333, 10%),
   light-night: lighten(#333, 15%),
@@ -22,6 +24,9 @@ $box-shadows: (
   ),
   light: (
     0px 2px 4px rgba(51, 51, 51, 0.1),
+  ),
+  menu: (
+    0px 4px 6px rgba(51, 51, 51, 0.5),
   ),
 );
 $transitions: (
@@ -44,7 +49,8 @@ $transitions: (
   width: 1300px;
   max-width: 100%;
   margin: 0 auto;
-  padding: 0px 50px;
+  padding: 75px 50px;
+  padding-bottom: 20px;
   border-left: 1px solid getColor(secondary);
   border-right: 1px solid getColor(secondary);
   min-height: 100vh;
@@ -75,6 +81,23 @@ $transitions: (
   }
 }
 
+.background-popup {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: getTransition(smooth);
+  background-color: getColor(bg-dark);
+  z-index: 9;
+  &--active {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
 .btn-handler {
   display: none;
 }
@@ -87,6 +110,7 @@ $transitions: (
   border: 1px solid transparent;
   outline: none;
   transition: getTransition(smooth);
+  text-decoration: none;
   &__name {
     margin: 0px 4px;
   }
@@ -107,6 +131,7 @@ $transitions: (
 }
 .btn-simple {
   border-color: getColor(secondary);
+  color: getColor(primary);
 }
 
 .field {
@@ -389,5 +414,159 @@ $transitions: (
     display: flex;
     padding-top: 38px;
     justify-content: flex-end;
+  }
+}
+
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: getColor(primary);
+  z-index: 10;
+  box-shadow: getShadows(menu);
+  &__menu {
+    margin: 0 auto;
+    width: 1400px;
+    max-width: 100%;
+    padding: 0px 50px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+}
+
+.link {
+  color: getColor(accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  padding: 15px 13px;
+  transition: getTransition(smooth);
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  &--active {
+    border-top-color: getColor(danger);
+    &:hover {
+      background-color: getColor(primary) !important;
+    }
+  }
+  &:hover {
+    background-color: getColor(light-primary);
+  }
+  &__icon {
+  }
+  &__name {
+    margin-left: 7px;
+  }
+  &__logo {
+    font-size: 1.1em;
+    margin-right: auto;
+    padding: 0px 10px;
+    align-self: stretch;
+    .link__icon {
+      font-size: 1.4em;
+    }
+  }
+}
+
+.drop-menu {
+  position: relative;
+  &__btn {
+    padding: 7px 14px;
+    &--open {
+      background-color: getColor(light-primary);
+    }
+  }
+  &__container-img {
+    display: block;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    padding: 3px;
+    border: 1px solid getColor(secondary);
+  }
+  &__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  &__name {
+  }
+  &__container {
+    position: absolute;
+    top: 52px;
+    right: 0;
+    width: 120px;
+    background-color: getColor(accent);
+    border: 1px solid getColor(secondary);
+    border-top: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: getTransition(smooth);
+    transform: scale(0.9);
+    &--active {
+      transform: scale(1);
+      opacity: 1;
+      visibility: visible;
+    }
+    .link {
+      width: 100%;
+      color: getColor(primary);
+      &:hover {
+        background-color: getColor(secondary);
+      }
+    }
+  }
+}
+
+.main {
+  display: flex;
+  padding-top: 52px;
+  width: 100%;
+  min-height: 100vh;
+  &__content {
+    width: 50%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  &__bg-image {
+    width: 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url("./images/city-bg.jpg");
+  }
+  &__info {
+    width: 600px;
+    max-width: 100%;
+    padding-right: 20px;
+  }
+  &__title {
+    display: flex;
+    align-items: center;
+    font-size: 2.6em;
+  }
+  &__icon {
+    font-size: 1.5em;
+  }
+  &__name {
+    margin-left: 8px;
+  }
+  &__paragraph {
+    font-size: 1.1em;
+    margin: 1.4em 0;
+  }
+  &__btn {
+    margin-right: 10px;
+  }
+  &__btns {
+    display: flex;
+    padding-top: 1em;
+    align-items: center;
   }
 }
