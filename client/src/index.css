@@ -8,8 +8,11 @@ body {
   color: #333;
   font-family: "Quicksand", sans-serif;
 }
+
 button,
 label,
+select,
+option,
 input {
   font-family: inherit;
   font-size: inherit;
@@ -20,7 +23,3 @@ button {
   border: none;
   cursor: pointer;
 }
-
-/* input, label{
-
-} */

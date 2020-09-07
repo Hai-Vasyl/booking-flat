@@ -13,7 +13,6 @@ const schema = new Schema({
   quantity: { type: Number, required: true, default: 1 },
   owner: { type: Types.ObjectId, ref: "User", required: true },
   apartment: { type: Types.ObjectId, ref: "Apartment", required: true },
-  statusActive: { type: Boolean, required: true, default: true },
 })
 
 module.exports = model("Voucher", schema)

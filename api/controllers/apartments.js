@@ -82,10 +82,6 @@ exports.apartment_update = async (req, res) => {
       $set: { timeRanges: idTimeRanges },
     })
 
-    // await Apartment.findByIdAndUpdate(apartmentId, {
-    //   $set: { timeRanges: idTimeRanges },
-    // })
-
     res.json("Apartment updated!")
   } catch (error) {
     res.status(400).json(`Apartment editing error: ${error.messsage}`)

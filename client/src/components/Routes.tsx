@@ -31,16 +31,13 @@ const Routes: React.FC = () => {
           <Switch>
             <Route exact path='/' component={Main} />
             <Route path='/create-flat' component={CreateEditFlat} />
-            <Route path='/create-voucher' component={CreateEditVoucher} />
             <Route path='/orders-vouchers' component={OrderBookings} />
             <Route exact path='/user' component={User} />
 
             <Route path='/filter/:filterString' component={Filter} />
             <Route path='/edit-flat/:flatId' component={CreateEditFlat} />
-            <Route
-              path='/edit-voucher/:voucherId'
-              component={CreateEditVoucher}
-            />
+            <Route path='/create-voucher/:id' component={CreateEditVoucher} />
+            <Route path='/edit-voucher/:id' component={CreateEditVoucher} />
             <Route path='/details/flat/:flatId' component={DetailsFlat} />
             <Route
               path='/details/voucher/:voucherId'
@@ -53,16 +50,13 @@ const Routes: React.FC = () => {
           <Switch>
             <Route exact path='/' component={Main} />
             <Route path='/create-flat' component={CreateEditFlat} />
-            <Route path='/create-voucher' component={CreateEditVoucher} />
             <Route path='/orders-vouchers' component={OrderBookings} />
             <Route exact path='/user' component={User} />
 
             <Route path='/filter/:filterString' component={Filter} />
             <Route path='/edit-flat/:flatId' component={CreateEditFlat} />
-            <Route
-              path='/edit-voucher/:voucherId'
-              component={CreateEditVoucher}
-            />
+            <Route path='/create-voucher/:id' component={CreateEditVoucher} />
+            <Route path='/edit-voucher/:id' component={CreateEditVoucher} />
             <Route path='/details/flat/:flatId' component={DetailsFlat} />
             <Route
               path='/details/voucher/:voucherId'

@@ -111,7 +111,6 @@ $transitions: (
 
 .field {
   display: block;
-  // margin-bottom: 0.5em;
   &--close {
     display: none;
   }
@@ -148,6 +147,33 @@ $transitions: (
     &:focus {
       outline-color: getColor(focus);
     }
+  }
+}
+
+.select {
+  display: flex;
+  border: 1px solid getColor(secondary);
+  &__name {
+    width: 50%;
+    text-align: center;
+    margin: auto;
+  }
+  &__viewer {
+    width: 50%;
+    border-radius: 0px;
+    background-color: getColor(primary);
+    color: getColor(accent);
+    border: none;
+    outline: 2px solid transparent;
+    padding: 6px;
+    cursor: pointer;
+    &:focus {
+      outline-color: getColor(focus);
+    }
+  }
+  &__option {
+    background-color: getColor(accent);
+    color: getColor(primary);
   }
 }
 
@@ -229,7 +255,6 @@ $transitions: (
   }
   &__container {
     width: 50%;
-    min-height: 50vh;
     border-right: 1px solid getColor(secondary);
   }
   &__btns {
@@ -293,7 +318,7 @@ $transitions: (
     width: 100%;
   }
   &__container-slots {
-    height: 25vh;
+    height: 30vh;
     background-color: getColor(bg-light);
     overflow: hidden;
     border-radius: 5px;
@@ -349,5 +374,20 @@ $transitions: (
     & > * {
       margin: auto;
     }
+  }
+}
+
+.form-voucher {
+  display: flex;
+  border: 1px solid getColor(secondary);
+  &__container {
+    width: 50%;
+    padding: 20px;
+    border-right: 1px solid getColor(secondary);
+  }
+  &__btns {
+    display: flex;
+    padding-top: 38px;
+    justify-content: flex-end;
   }
 }
