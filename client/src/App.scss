@@ -708,7 +708,21 @@ $transitions: (
   display: flex;
   flex-wrap: wrap;
   &__block {
-    border: 1px solid getColor(secondary);
+    border-left: 1px solid getColor(secondary);
     padding: 10px;
+    display: flex;
+    flex-direction: column;
+  }
+  &__title {
+    margin-bottom: 10px;
+  }
+  &__form {
+    // display: flex;
+    // align-items: center;
+    // justify-content: center;
+  }
+  &__label-radio {
+    display: flex;
+    margin: 5px 0;
   }
 }

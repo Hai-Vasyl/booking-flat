@@ -34,6 +34,8 @@ interface Form {
   priceto: string
   numberRooms: string
   variant: string
+  settlement: string
+  eviction: string
 }
 
 const Filter: React.FC = () => {
@@ -41,24 +43,19 @@ const Filter: React.FC = () => {
   const history = useHistory()
 
   const [data, setData] = useState<Data[]>([])
-  const [type, setType] = useState<string | null>()
+  const [messageDate, setMessageDate] = useState("")
   const [form, setForm] = useState<Form>({
-    type: "flats",
+    type: "",
     pricefrom: "",
     priceto: "",
     numberRooms: "",
     variant: "",
-  })
-
-  const [formDate, setFormDate] = useState({
     settlement: "",
     eviction: "",
   })
 
   useEffect(() => {
     const query: URLSearchParams = new URLSearchParams(location.search)
-
-    setType(query.get("type"))
 
     const propsQuery = {
       type: query.get("type") || "",
@@ -83,7 +80,6 @@ const Filter: React.FC = () => {
           data: { ...propsQuery },
         })
 
-        console.log(res.data)
         setData(res.data)
       } catch (error) {}
     }
@@ -92,49 +88,56 @@ const Filter: React.FC = () => {
   }, [location])
 
   const handleOrder = () => {}
+
   const handleChangeField = (event: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [event.target.name]: event.target.value })
   }
 
-  const pushHistory = () => {
-    return history.push(
-      "/filter?type=" + form.type + form.pricefrom
-        ? `&pricefrom=${form.pricefrom}`
-        : "" + form.priceto
-        ? `&priceto=${form.priceto}`
-        : "" + form.numberRooms
-        ? `&numberRooms=${form.numberRooms}`
-        : "" + form.variant
-        ? `&variant=${form.variant}`
-        : "" + formDate.settlement
-        ? `&settlement=${formDate.settlement}`
-        : "" + formDate.eviction
-        ? `&eviction=${formDate.eviction}`
-        : ""
-    )
-  }
+  const pushHistory = (value: string, isType: boolean) => {
+    if (isType) {
+      return history.push(`/filter?type=${value}`)
+    }
 
-  const handleSubmitSort = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    console.log(form)
-    // history.push("/filter")
     history.push(
       "/filter?type=" +
         form.type +
         (form.pricefrom ? `&pricefrom=${form.pricefrom}` : "") +
         (form.priceto ? `&priceto=${form.priceto}` : "") +
         (form.numberRooms ? `&numberRooms=${form.numberRooms}` : "") +
-        (form.variant ? `&variant=${form.variant}` : "") +
-        (formDate.settlement ? `&settlement=${formDate.settlement}` : "") +
-        (formDate.eviction ? `&eviction=${formDate.eviction}` : "")
+        (value && !isType
+          ? value === "all"
+            ? ""
+            : `&variant=${value}`
+          : form.variant
+          ? `&variant=${form.variant}`
+          : "") +
+        (form.settlement ? `&settlement=${form.settlement}` : "") +
+        (form.eviction ? `&eviction=${form.eviction}` : "")
     )
-    // pushHistory()
   }
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [event.target.name]: event.target.value })
+  const handleSubmitSort = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
 
-    pushHistory()
+    pushHistory("", false)
+  }
+
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = event.target
+
+    pushHistory(value, name === "type")
+  }
+
+  const handleChangeDate = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (new Date(event.target.value) <= new Date()) {
+      return setMessageDate(`Wrong ${[event.target.name]} date!`)
+    } else {
+      setMessageDate("")
+    }
+
+    setForm({ ...form, [event.target.name]: event.target.value })
   }
 
   const flats = data.map((item) => {
@@ -241,31 +244,36 @@ const Filter: React.FC = () => {
     <div className='wrapper'>
       <div className='sort-panel'>
         <div className='sort-panel__block'>
-          <span>Type:</span>
-          <form>
-            <input
-              type='radio'
-              name='type'
-              value='flats'
-              onChange={handleChange}
-              checked={form.type === "flats" ? true : false}
-            />
-            Apartments
-            <br />
-            <input
-              type='radio'
-              name='type'
-              value='vouchers'
-              onChange={handleChange}
-              checked={form.type === "vouchers" ? true : false}
-            />
-            Vouchers
-            <br />
+          <span className='sort-panel__title'>Type:</span>
+          <form className='sort-panel__form'>
+            <label className='sort-panel__label-radio'>
+              <input
+                type='radio'
+                name='type'
+                value='flats'
+                onChange={handleChange}
+                className='sort-panel__radio'
+                checked={form.type === "flats" ? true : false}
+              />
+              <span className=''>Apartments</span>
+            </label>
+
+            <label className='sort-panel__label-radio'>
+              <input
+                type='radio'
+                name='type'
+                value='vouchers'
+                className='sort-panel__radio'
+                onChange={handleChange}
+                checked={form.type === "vouchers" ? true : false}
+              />
+              Vouchers
+            </label>
           </form>
         </div>
         <div className='sort-panel__block'>
-          <span>Price</span>
-          <form onSubmit={handleSubmitSort}>
+          <span className='sort-panel__title'>Price:</span>
+          <form className='sort-panel__form' onSubmit={handleSubmitSort}>
             <input
               type='text'
               name='pricefrom'
@@ -281,18 +289,62 @@ const Filter: React.FC = () => {
             <button>Submit</button>
           </form>
         </div>
-        <div className='sort-panel__block'>
-          {/* <span>Date</span>
-          <form>
-            <input type="date" name="settlement" value="" onChange={handleChangeDate} />
-            <input type="date" name="eviction"  onChange={handleChangeDate}/>
-            </form> */}
-        </div>
-        <div className='sort-panel__block'></div>
-        <div className='sort-panel__block'></div>
+        {form.type === "flats" && (
+          <>
+            <div className='sort-panel__block'>
+              <span className='sort-panel__title'>Date:</span>
+              <form className='sort-panel__form' onSubmit={handleSubmitSort}>
+                <input
+                  type='date'
+                  name='settlement'
+                  value={form.settlement}
+                  onChange={handleChangeDate}
+                />
+                <input
+                  type='date'
+                  name='eviction'
+                  value={form.eviction}
+                  onChange={handleChangeDate}
+                />
+                <button>Submit</button>
+              </form>
+              <span>{messageDate}</span>
+            </div>
+            <div className='sort-panel__block'>
+              <span className='sort-panel__title'>Nuber of rooms:</span>
+              <form className='sort-panel__form' onSubmit={handleSubmitSort}>
+                <input
+                  type='text'
+                  value={form.numberRooms}
+                  name='numberRooms'
+                  onChange={handleChangeField}
+                />
+                <button>Submit</button>
+              </form>
+            </div>
+          </>
+        )}
+        {form.type === "vouchers" && (
+          <div className='sort-panel__block'>
+            <span className='sort-panel__title'>Variant:</span>
+            <form className='sort-panel__form'>
+              <select
+                value={form.variant}
+                name='variant'
+                onChange={handleChange}
+              >
+                <option value='all'>All</option>
+                <option value='restaurant'>Restaurant</option>
+                <option value='club'>Club</option>
+                <option value='museum'>Museum</option>
+                <option value='cinema'>Cinema</option>
+              </select>
+            </form>
+          </div>
+        )}
       </div>
       <div className='filtered-items'>
-        {type === "flats" ? flats : vouchers}
+        {form.type === "flats" ? flats : vouchers}
       </div>
     </div>
   )

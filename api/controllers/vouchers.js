@@ -80,10 +80,26 @@ exports.voucher_delete = async (req, res) => {
 
 exports.vouchers_get = async (req, res) => {
   try {
-    const { price, variant } = req.body
+    const { pricefrom, priceto, variant } = req.body
+
+    const query =
+      pricefrom && priceto
+        ? {
+            $gte: pricefrom,
+            $lte: priceto,
+          }
+        : !pricefrom && !priceto
+        ? { $exists: true }
+        : pricefrom && !priceto
+        ? {
+            $gte: pricefrom,
+          }
+        : {
+            $lte: priceto,
+          }
 
     let vouchers = await Voucher.find({
-      price: price ? price : { $exists: true },
+      price: query,
       variant: variant ? variant : { $exists: true },
     })
       .populate({ path: "owner", select: "firstname lastname ava" })

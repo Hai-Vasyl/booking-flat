@@ -158,18 +158,6 @@ exports.apartments_get = async (req, res) => {
       apartmentsFiltred.push(item)
     })
 
-    // let apartments = await Apartment.find({
-    //   price: price ? price : { $exists: true },
-    // })
-    // let apartments = await Apartment.find({}).populate({
-    //   path: "timeRanges",
-    //   match: {
-    //     settlement: { $lte: "2020-09-15" },
-    //   },
-    // })
-    // let apartments = await TimeRange.find({
-    //   settlement: { $gte: "2020-09-15" },
-    // })
     res.json(apartmentsFiltred)
   } catch (error) {
     res.status(400).json(`Apartments getting error: ${error.message}`)
