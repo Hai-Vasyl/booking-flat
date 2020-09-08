@@ -619,6 +619,7 @@ $transitions: (
     text-decoration: none;
     color: getColor(primary);
     font-size: 1.3em;
+    font-weight: bold;
   }
   &__paragraph {
     padding: 10px 0;
@@ -671,5 +672,43 @@ $transitions: (
   &__settlement {
   }
   &__eviction {
+  }
+}
+
+.voucher-item {
+  padding: 15px;
+  &__image-side {
+    border-radius: 50%;
+    padding: 7px;
+    border: 1px solid getColor(secondary);
+    width: 150px;
+    height: 150px;
+  }
+  &__image {
+    border-radius: 50%;
+  }
+  &__info {
+  }
+  &__paragraph {
+    margin: 0;
+  }
+  &__field {
+    display: block;
+  }
+  &__order {
+    display: flex;
+    padding-left: 15px;
+    & > * {
+      margin: auto;
+    }
+  }
+}
+
+.sort-panel {
+  display: flex;
+  flex-wrap: wrap;
+  &__block {
+    border: 1px solid getColor(secondary);
+    padding: 10px;
   }
 }

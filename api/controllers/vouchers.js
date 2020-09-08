@@ -91,6 +91,7 @@ exports.vouchers_get = async (req, res) => {
         path: "apartment",
         select: "name image",
       })
+      .select("-description")
 
     res.json(vouchers)
   } catch (error) {

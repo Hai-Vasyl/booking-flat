@@ -118,10 +118,26 @@ exports.apartment_delete = async (req, res) => {
 
 exports.apartments_get = async (req, res) => {
   try {
-    const { price, numberRooms, settlement, eviction } = req.body
+    const { pricefrom, priceto, numberRooms, settlement, eviction } = req.body
+
+    const query =
+      pricefrom && priceto
+        ? {
+            $gte: pricefrom,
+            $lte: priceto,
+          }
+        : !pricefrom && !priceto
+        ? { $exists: true }
+        : pricefrom && !priceto
+        ? {
+            $gte: pricefrom,
+          }
+        : {
+            $lte: priceto,
+          }
 
     let apartments = await Apartment.find({
-      price: price ? price : { $exists: true },
+      price: query,
       numberRooms: numberRooms ? numberRooms : { $exists: true },
     })
       .populate({ path: "owner", select: "firstname lastname ava" })
@@ -132,7 +148,7 @@ exports.apartments_get = async (req, res) => {
           eviction: eviction ? { $lte: eviction } : { $exists: true },
         },
       })
-      .populate({ path: "vouchers", select: "name image variant" })
+      .select("-description, -vouchers")
 
     let apartmentsFiltred = []
     apartments.forEach((item) => {

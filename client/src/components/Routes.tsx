@@ -50,7 +50,7 @@ const Routes: React.FC = () => {
               component={DetailsVoucher}
             />
             <Route path='/user/:userId' component={User} />
-            <Redirect to='/' />
+            {/* <Redirect to='/' /> */}
           </Switch>
         ) : (
           <Switch>
