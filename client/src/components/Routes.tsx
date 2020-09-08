@@ -40,8 +40,7 @@ const Routes: React.FC = () => {
             <Route path='/create-flat' component={CreateEditFlat} />
             <Route path='/orders' component={OrderBookings} />
 
-            <Route path='/filter/vouchers/:filterString' component={Filter} />
-            <Route path='/filter/flats/:filterString' component={Filter} />
+            <Route path='/filter' component={Filter} />
             <Route path='/edit-flat/:flatId' component={CreateEditFlat} />
             <Route path='/create-voucher/:id' component={CreateEditVoucher} />
             <Route path='/edit-voucher/:id' component={CreateEditVoucher} />

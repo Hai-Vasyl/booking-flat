@@ -77,3 +77,23 @@ exports.voucher_delete = async (req, res) => {
     res.status(400).json(`Voucher deleting error: ${error.message}`)
   }
 }
+
+exports.vouchers_get = async (req, res) => {
+  try {
+    const { price, variant } = req.body
+
+    let vouchers = await Voucher.find({
+      price: price ? price : { $exists: true },
+      variant: variant ? variant : { $exists: true },
+    })
+      .populate({ path: "owner", select: "firstname lastname ava" })
+      .populate({
+        path: "apartment",
+        select: "name image",
+      })
+
+    res.json(vouchers)
+  } catch (error) {
+    res.status(400).json(`Vouchers getting error: ${error.message}`)
+  }
+}

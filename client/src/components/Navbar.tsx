@@ -13,7 +13,7 @@ import { BiBuildingHouse } from "react-icons/bi"
 import { FiShoppingCart } from "react-icons/fi"
 import { TOGGLE_DROP_MENU } from "../redux/menu/menuTypes"
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
   const {
     auth: { userData },
     menu: { drop },
@@ -37,7 +37,7 @@ const Navbar = () => {
           <span className='link__name'>Home</span>
         </NavLink>
         <NavLink
-          to='/filter/flats/all'
+          to='/filter?type=flats'
           className='link'
           activeClassName='link--active'
         >
@@ -45,7 +45,7 @@ const Navbar = () => {
           <span className='link__name'>Flats</span>
         </NavLink>
         <NavLink
-          to='/filter/vouchers/all'
+          to='/filter?type=vouchers'
           className='link'
           activeClassName='link--active'
         >

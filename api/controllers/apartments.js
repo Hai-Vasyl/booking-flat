@@ -115,3 +115,47 @@ exports.apartment_delete = async (req, res) => {
     res.status(400).json(`Apartment deleting error: ${error.messsage}`)
   }
 }
+
+exports.apartments_get = async (req, res) => {
+  try {
+    const { price, numberRooms, settlement, eviction } = req.body
+
+    let apartments = await Apartment.find({
+      price: price ? price : { $exists: true },
+      numberRooms: numberRooms ? numberRooms : { $exists: true },
+    })
+      .populate({ path: "owner", select: "firstname lastname ava" })
+      .populate({
+        path: "timeRanges",
+        match: {
+          settlement: settlement ? { $gte: settlement } : { $exists: true },
+          eviction: eviction ? { $lte: eviction } : { $exists: true },
+        },
+      })
+      .populate({ path: "vouchers", select: "name image variant" })
+
+    let apartmentsFiltred = []
+    apartments.forEach((item) => {
+      if (!item.timeRanges.length) {
+        return
+      }
+      apartmentsFiltred.push(item)
+    })
+
+    // let apartments = await Apartment.find({
+    //   price: price ? price : { $exists: true },
+    // })
+    // let apartments = await Apartment.find({}).populate({
+    //   path: "timeRanges",
+    //   match: {
+    //     settlement: { $lte: "2020-09-15" },
+    //   },
+    // })
+    // let apartments = await TimeRange.find({
+    //   settlement: { $gte: "2020-09-15" },
+    // })
+    res.json(apartmentsFiltred)
+  } catch (error) {
+    res.status(400).json(`Apartments getting error: ${error.message}`)
+  }
+}

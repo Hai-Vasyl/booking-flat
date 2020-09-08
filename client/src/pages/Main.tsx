@@ -3,7 +3,7 @@ import { BsBootstrap, BsCardChecklist } from "react-icons/bs"
 import { BiBuildingHouse } from "react-icons/bi"
 import { Link } from "react-router-dom"
 
-const Main = () => {
+const Main: React.FC = () => {
   return (
     <div className='main'>
       <div className='main__content'>
@@ -19,11 +19,11 @@ const Main = () => {
             fugiat natus. Ipsam.
           </p>
           <div className='main__btns'>
-            <Link to='/filter/flats/all' className='main__btn btn btn-primary'>
+            <Link to='/filter?type=flats' className='main__btn btn btn-primary'>
               <BiBuildingHouse className='btn__icon' />
               <span className='btn__name'>Flats</span>
             </Link>
-            <Link to='/filter/vouchers/all' className='btn btn-simple'>
+            <Link to='/filter?type=vouchers' className='btn btn-simple'>
               <BsCardChecklist className='btn__icon' />
               <span className='btn__name'>Vouchers</span>
             </Link>

@@ -26,7 +26,7 @@ interface FormItem {
   value: string
 }
 
-const CreateEditVoucher = () => {
+const CreateEditVoucher: React.FC = () => {
   const { id } = useParams<PropsParams>()
   const { pathname } = useLocation<PropsLocation>()
   const isCreate = pathname === `/create-voucher/${id}`

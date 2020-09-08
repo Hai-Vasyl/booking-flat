@@ -6,11 +6,13 @@ const {
   voucher_update,
   voucher_get,
   voucher_delete,
+  vouchers_get,
 } = require("../controllers/vouchers")
 
 router.post("/create", auth, voucher_create)
 router.post("/update/:voucherId", auth, voucher_update)
 router.get("/get/:voucherId", voucher_get)
 router.delete("/delete/:voucherId", auth, voucher_delete)
+router.post("/get-filtered", vouchers_get)
 
 module.exports = router
