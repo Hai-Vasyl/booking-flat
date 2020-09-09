@@ -39,8 +39,8 @@ const Routes: React.FC = () => {
             <Route exact path='/' component={Main} />
             <Route path='/create-flat' component={CreateEditFlat} />
             <Route path='/orders' component={OrderBookings} />
-
             <Route path='/filter' component={Filter} />
+
             <Route path='/edit-flat/:flatId' component={CreateEditFlat} />
             <Route path='/create-voucher/:id' component={CreateEditVoucher} />
             <Route path='/edit-voucher/:id' component={CreateEditVoucher} />
@@ -54,12 +54,11 @@ const Routes: React.FC = () => {
           </Switch>
         ) : (
           <Switch>
-            {/* <Route exact path='/' component={Main} />
+            <Route exact path='/' component={Main} />
             <Route path='/create-flat' component={CreateEditFlat} />
-            <Route path='/orders-vouchers' component={OrderBookings} />
-            <Route exact path='/user' component={User} />
+            <Route path='/orders' component={OrderBookings} />
+            <Route path='/filter' component={Filter} />
 
-            <Route path='/filter/:filterString' component={Filter} />
             <Route path='/edit-flat/:flatId' component={CreateEditFlat} />
             <Route path='/create-voucher/:id' component={CreateEditVoucher} />
             <Route path='/edit-voucher/:id' component={CreateEditVoucher} />
@@ -69,7 +68,8 @@ const Routes: React.FC = () => {
               component={DetailsVoucher}
             />
             <Route path='/user/:userId' component={User} />
-            <Redirect to='/' /> */}
+            <Redirect to='/' />
+            <Redirect to='/' />
           </Switch>
         )
       ) : (

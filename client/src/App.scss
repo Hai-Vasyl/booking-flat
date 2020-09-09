@@ -664,10 +664,27 @@ $transitions: (
     padding: 5px 0;
     display: block;
     width: 100%;
-    border-bottom: 1px solid getColor(secondary);
+    border: 1px solid transparent;
+    border-bottom-color: getColor(secondary);
+    transition: getTransition(smooth);
+    background-color: getColor(accent);
+    &:hover {
+      border-color: getColor(danger);
+    }
     &--booked {
       background-color: getColor(bg-danger);
     }
+    &--ordered {
+      background-color: getColor(success);
+    }
+  }
+  &__settlement,
+  &__eviction {
+    display: inline-block;
+    width: 100px;
+    padding: 5px;
+    border: 1px solid getColor(secondary);
+    border-radius: 5px;
   }
   &__settlement {
   }
@@ -702,27 +719,74 @@ $transitions: (
       margin: auto;
     }
   }
+  &__btn {
+    &--active {
+      background-color: getColor(success);
+    }
+  }
 }
 
 .sort-panel {
   display: flex;
   flex-wrap: wrap;
+  margin-bottom: 1.5em;
   &__block {
-    border-left: 1px solid getColor(secondary);
+    border: 1px solid transparent;
+    border-left-color: getColor(secondary);
+    border-bottom-color: getColor(secondary);
+    // border-right: 1px solid transparent;
     padding: 10px;
     display: flex;
     flex-direction: column;
+    &:first-child {
+      border-left-color: transparent;
+    }
   }
   &__title {
     margin-bottom: 10px;
   }
   &__form {
-    // display: flex;
-    // align-items: center;
-    // justify-content: center;
+    display: flex;
   }
   &__label-radio {
     display: flex;
-    margin: 5px 0;
+    margin: 6px 0;
+    align-items: center;
+    cursor: pointer;
+  }
+  &__radio {
+    margin-right: 6px;
+  }
+  &__name {
+  }
+  &__input {
+    border: 1px solid getColor(secondary);
+    outline: 2px solid transparent;
+    position: relative;
+    padding: 5px;
+    width: 120px;
+    border-left-color: transparent;
+    &:focus {
+      z-index: 2;
+      outline-color: getColor(focus);
+    }
+    &:first-child {
+      border-left-color: getColor(secondary);
+    }
+  }
+  &__btn {
+    padding: 5px 10px;
+    align-self: stretch;
+    background-color: getColor(primary);
+    color: getColor(accent);
+  }
+  &__select {
+    cursor: pointer;
+    border: none;
+    outline: none;
+  }
+  &__option {
+    background-color: getColor(accent);
+    color: getColor(primary);
   }
 }

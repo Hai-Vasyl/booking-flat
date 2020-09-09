@@ -44,14 +44,14 @@ const Navbar: React.FC = () => {
           <BiBuildingHouse className='link__icon' />
           <span className='link__name'>Flats</span>
         </NavLink>
-        <NavLink
+        {/* <NavLink
           to='/filter?type=vouchers'
           className='link'
           activeClassName='link--active'
         >
           <BsCardChecklist className='link__icon' />
           <span className='link__name'>Vouchers</span>
-        </NavLink>
+        </NavLink> */}
         <NavLink to='/orders' className='link' activeClassName='link--active'>
           <FiShoppingCart className='link__icon' />
           <span className='link__name'>Orders</span>

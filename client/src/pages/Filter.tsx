@@ -3,6 +3,16 @@ import { useLocation, useHistory } from "react-router-dom"
 import axios from "axios"
 import { Link } from "react-router-dom"
 import { FiShoppingCart } from "react-icons/fi"
+import { useDispatch, useSelector } from "react-redux"
+import {
+  ADD_CART_ORDER,
+  ADD_CART_BOOKING,
+  REMOVE_CART_ORDER,
+  REMOVE_CART_BOOKING,
+  AddCartBookingPayload,
+  AddCartOrderPayload,
+} from "../redux/orders/ordersTypes"
+import { RootStore } from "../redux/store"
 
 interface TimeRanges {
   bookedStatus: boolean
@@ -41,6 +51,10 @@ interface Form {
 const Filter: React.FC = () => {
   const location = useLocation()
   const history = useHistory()
+  const dispatch = useDispatch()
+  const {
+    orders: { bookings, orderList },
+  } = useSelector((state: RootStore) => state)
 
   const [data, setData] = useState<Data[]>([])
   const [messageDate, setMessageDate] = useState("")
@@ -79,15 +93,12 @@ const Filter: React.FC = () => {
           method: "post",
           data: { ...propsQuery },
         })
-
         setData(res.data)
       } catch (error) {}
     }
 
     fetchData()
   }, [location])
-
-  const handleOrder = () => {}
 
   const handleChangeField = (event: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [event.target.name]: event.target.value })
@@ -140,6 +151,46 @@ const Filter: React.FC = () => {
     setForm({ ...form, [event.target.name]: event.target.value })
   }
 
+  const isIncudeInOrders = (id: string, timeId?: string) => {
+    let isInclude = false
+
+    if (form.type === "flats") {
+      bookings.forEach((item) => {
+        if (item._id === id && item.time._id == timeId) {
+          isInclude = true
+        }
+      })
+    } else {
+      orderList.forEach((item) => {
+        if (item._id === id) {
+          isInclude = true
+        }
+      })
+    }
+
+    return isInclude
+  }
+
+  const handleOrder = (
+    itemData: AddCartOrderPayload | AddCartBookingPayload,
+    dateId?: string
+  ) => {
+    const isFlatsType = form.type === "flats"
+    const isInclude = isIncudeInOrders(itemData._id, dateId)
+
+    if (isInclude) {
+      dispatch({
+        type: isFlatsType ? REMOVE_CART_BOOKING : REMOVE_CART_ORDER,
+        payload: itemData._id,
+      })
+    } else {
+      dispatch({
+        type: isFlatsType ? ADD_CART_BOOKING : ADD_CART_ORDER,
+        payload: { ...itemData },
+      })
+    }
+  }
+
   const flats = data.map((item) => {
     return (
       <div key={item._id} className='flat-item'>
@@ -178,21 +229,43 @@ const Filter: React.FC = () => {
         </div>
         <div className='flat-item__date-slots'>
           {item.timeRanges &&
-            item.timeRanges.map((item) => {
+            item.timeRanges.map((elem) => {
               return (
                 <button
-                  key={item._id}
+                  key={elem._id}
                   className={`flat-item__slot ${
-                    item.bookedStatus && "flat-item__slot--booked"
+                    elem.bookedStatus
+                      ? "flat-item__slot--booked"
+                      : isIncudeInOrders(item._id, elem._id) &&
+                        "flat-item__slot--ordered"
                   }`}
-                  onClick={item.bookedStatus ? () => {} : handleOrder}
+                  onClick={
+                    elem.bookedStatus
+                      ? () => {}
+                      : () =>
+                          handleOrder(
+                            {
+                              image: item.image,
+                              name: item.name,
+                              numberRooms: item.numberRooms,
+                              price: item.price,
+                              time: {
+                                _id: elem._id,
+                                settlement: elem.settlement,
+                                eviction: elem.eviction,
+                              },
+                              _id: item._id,
+                            },
+                            elem._id
+                          )
+                  }
                 >
                   <span className='flat-item__settlement'>
-                    {item.settlement.slice(0, 10)}
+                    {elem.settlement.slice(0, 10)}
                   </span>
                   -
                   <span className='flat-item__eviction'>
-                    {item.eviction.slice(0, 10)}
+                    {elem.eviction.slice(0, 10)}
                   </span>
                 </button>
               )
@@ -231,7 +304,21 @@ const Filter: React.FC = () => {
           </p>
         </div>
         <div className='voucher-item__order'>
-          <button className='btn btn-simple'>
+          <button
+            className={`voucher-item__btn btn btn-simple ${
+              isIncudeInOrders(item._id) && "voucher-item__btn--active"
+            }`}
+            onClick={() =>
+              handleOrder({
+                image: item.image,
+                name: item.name,
+                price: item.price,
+                quantity: item.quantity,
+                variant: item.variant,
+                _id: item._id,
+              })
+            }
+          >
             <FiShoppingCart className='btn__icon' />
             <span className='btn__name'>Order</span>
           </button>
@@ -245,7 +332,7 @@ const Filter: React.FC = () => {
       <div className='sort-panel'>
         <div className='sort-panel__block'>
           <span className='sort-panel__title'>Type:</span>
-          <form className='sort-panel__form'>
+          <form>
             <label className='sort-panel__label-radio'>
               <input
                 type='radio'
@@ -255,7 +342,7 @@ const Filter: React.FC = () => {
                 className='sort-panel__radio'
                 checked={form.type === "flats" ? true : false}
               />
-              <span className=''>Apartments</span>
+              <span className='sort-panel__name'>Apartments</span>
             </label>
 
             <label className='sort-panel__label-radio'>
@@ -267,7 +354,7 @@ const Filter: React.FC = () => {
                 onChange={handleChange}
                 checked={form.type === "vouchers" ? true : false}
               />
-              Vouchers
+              <span className='sort-panel__name'>Vouchers</span>
             </label>
           </form>
         </div>
@@ -278,15 +365,17 @@ const Filter: React.FC = () => {
               type='text'
               name='pricefrom'
               value={form.pricefrom}
+              className='sort-panel__input'
               onChange={handleChangeField}
             />
             <input
               type='text'
               name='priceto'
+              className='sort-panel__input'
               value={form.priceto}
               onChange={handleChangeField}
             />
-            <button>Submit</button>
+            <button className='sort-panel__btn'>Submit</button>
           </form>
         </div>
         {form.type === "flats" && (
@@ -297,16 +386,18 @@ const Filter: React.FC = () => {
                 <input
                   type='date'
                   name='settlement'
+                  className='sort-panel__input'
                   value={form.settlement}
                   onChange={handleChangeDate}
                 />
                 <input
                   type='date'
                   name='eviction'
+                  className='sort-panel__input'
                   value={form.eviction}
                   onChange={handleChangeDate}
                 />
-                <button>Submit</button>
+                <button className='sort-panel__btn'>Submit</button>
               </form>
               <span>{messageDate}</span>
             </div>
@@ -316,10 +407,11 @@ const Filter: React.FC = () => {
                 <input
                   type='text'
                   value={form.numberRooms}
+                  className='sort-panel__input'
                   name='numberRooms'
                   onChange={handleChangeField}
                 />
-                <button>Submit</button>
+                <button className='sort-panel__btn'>Submit</button>
               </form>
             </div>
           </>
@@ -329,15 +421,26 @@ const Filter: React.FC = () => {
             <span className='sort-panel__title'>Variant:</span>
             <form className='sort-panel__form'>
               <select
+                className='sort-panel__btn sort-panel__select'
                 value={form.variant}
                 name='variant'
                 onChange={handleChange}
               >
-                <option value='all'>All</option>
-                <option value='restaurant'>Restaurant</option>
-                <option value='club'>Club</option>
-                <option value='museum'>Museum</option>
-                <option value='cinema'>Cinema</option>
+                <option className='sort-panel__option' value='all'>
+                  All
+                </option>
+                <option className='sort-panel__option' value='restaurant'>
+                  Restaurant
+                </option>
+                <option className='sort-panel__option' value='club'>
+                  Club
+                </option>
+                <option className='sort-panel__option' value='museum'>
+                  Museum
+                </option>
+                <option className='sort-panel__option' value='cinema'>
+                  Cinema
+                </option>
               </select>
             </form>
           </div>
