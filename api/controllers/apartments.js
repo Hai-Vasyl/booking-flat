@@ -163,3 +163,20 @@ exports.apartments_get = async (req, res) => {
     res.status(400).json(`Apartments getting error: ${error.message}`)
   }
 }
+
+exports.apartment_details_get = async (req, res) => {
+  try {
+    const { apartmentId } = req.params
+    const apartment = await Apartment.findById(apartmentId)
+      .populate({
+        path: "owner",
+        select: "firstname lastname ava",
+      })
+      .populate({ path: "timeRanges" })
+      .populate({ path: "vouchers", select: "name image price variant" })
+
+    res.json(apartment)
+  } catch (error) {
+    res.status(400).json(`Apartment details getting error: ${error.message}`)
+  }
+}

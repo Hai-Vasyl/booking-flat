@@ -71,7 +71,6 @@ const Routes: React.FC = () => {
             />
             <Route path='/user/:userId' component={User} />
             <Redirect to='/' />
-            <Redirect to='/' />
           </Switch>
         )
       ) : (
