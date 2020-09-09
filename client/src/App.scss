@@ -894,7 +894,7 @@ $transitions: (
   justify-content: center;
   padding-top: 1em;
   &__label {
-    border: 1px solid getColor(secondary);
+    border-left: 1px solid getColor(secondary);
     align-self: stretch;
     display: flex;
     align-items: center;
@@ -904,4 +904,40 @@ $transitions: (
     margin-left: 7px;
     font-weight: bold;
   }
+}
+
+.purchase-form {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  width: 450px;
+  max-width: 100%;
+  transform: translate(-50%, -20%);
+  opacity: 0;
+  visibility: hidden;
+  transition: getTransition(smooth);
+  z-index: 10;
+  background-color: getColor(accent);
+  padding: 20px;
+  &--open {
+    opacity: 1;
+    visibility: visible;
+  }
+  &__title {
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 0.5em;
+  }
+  &__btns {
+    display: flex;
+    padding-top: 1em;
+    justify-content: center;
+  }
+}
+
+.plug-text {
+  text-align: center;
+  color: getColor(secondary);
+  padding: 1em 0;
 }

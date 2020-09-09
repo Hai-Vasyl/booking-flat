@@ -8,6 +8,7 @@ import {
   REMOVE_CART_ORDER,
   SET_ORDERS,
   CHANGE_QUANTITY_ORDERS,
+  RESET_ORDERS,
 } from "./ordersTypes"
 import { AiOutlineOrderedList } from "react-icons/ai"
 
@@ -50,6 +51,8 @@ const ordersReducer = (
       }
     case SET_ORDERS:
       return action.payload
+    case RESET_ORDERS:
+      return initialState
     case CHANGE_QUANTITY_ORDERS:
       const { value, id } = action.payload
 

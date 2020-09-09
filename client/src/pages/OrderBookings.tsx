@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { RootStore } from "../redux/store"
-import { Link } from "react-router-dom"
-import { BsX, BsArrowRight } from "react-icons/bs"
+import { Link, useHistory } from "react-router-dom"
+import { BsX, BsArrowRight, BsPlus } from "react-icons/bs"
+import { AiOutlineWarning } from "react-icons/ai"
 import {
   CHANGE_QUANTITY_ORDERS,
   REMOVE_CART_ORDER,
   REMOVE_CART_BOOKING,
   AddCartBookingPayload,
   AddCartOrderPayload,
+  RESET_ORDERS,
 } from "../redux/orders/ordersTypes"
 import { TOGGLE_POPUP_MENU } from "../redux/menu/menuTypes"
+import axios from "axios"
 
 const OrderBookings = () => {
   const {
@@ -18,9 +21,19 @@ const OrderBookings = () => {
     menu: { popup },
   } = useSelector((state: RootStore) => state)
   const dispatch = useDispatch()
+  const history = useHistory()
   const [generalPrice, setGeneralPrice] = useState(0)
-
-  console.log(bookings, orderList)
+  const [form, setForm] = useState([
+    {
+      param: "firstname",
+      name: "First name",
+      msg: "",
+      type: "text",
+      value: "",
+    },
+    { param: "lastname", name: "Last name", msg: "", type: "text", value: "" },
+    { param: "email", name: "Email", msg: "", type: "email", value: "" },
+  ])
 
   useEffect(() => {
     setGeneralPrice(
@@ -49,6 +62,84 @@ const OrderBookings = () => {
       type: CHANGE_QUANTITY_ORDERS,
       payload: { value, id },
     })
+  }
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setForm(
+      form.map((item) => {
+        if (item.param === event.target.name) {
+          return { ...item, value: event.target.value, msg: "" }
+        }
+        return item
+      })
+    )
+  }
+
+  const handleSubmit = async (
+    event:
+      | React.FormEvent<HTMLFormElement>
+      | React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    try {
+      event.preventDefault()
+
+      let isEmptyFields = false
+      setForm(
+        form.map((item) => {
+          if (!item.value) {
+            isEmptyFields = true
+            return { ...item, msg: "Fill in this field!" }
+          }
+          return item
+        })
+      )
+
+      if (isEmptyFields) {
+        return
+      }
+
+      const [firstname, lastname, email] = form
+
+      const buyer = {
+        firstname: firstname.value,
+        lastname: lastname.value,
+        email: email.value,
+      }
+
+      const bookingsNew = bookings.map((item) => {
+        return {
+          apartment: item._id,
+          name: item.name,
+          numberRooms: item.numberRooms,
+          price: item.price,
+          timeRange: item.time._id,
+          settlement: item.time.settlement,
+          eviction: item.time.eviction,
+          ...buyer,
+        }
+      })
+
+      const orderListNew = orderList.map((item) => {
+        return {
+          voucher: item._id,
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price,
+          variant: item.variant,
+          ...buyer,
+        }
+      })
+
+      await axios({
+        url: "/orders/create",
+        method: "post",
+        data: { bookings: bookingsNew, orderList: orderListNew },
+      })
+
+      dispatch({ type: TOGGLE_POPUP_MENU })
+      dispatch({ type: RESET_ORDERS })
+      history.push("/filter?type=flats")
+    } catch (error) {}
   }
 
   const bookingsItems = bookings.map((item) => {
@@ -141,28 +232,83 @@ const OrderBookings = () => {
     )
   })
 
+  const fields = form.map((item) => {
+    return (
+      <label key={item.param} className='field'>
+        <span className='field__name'>{item.name}</span>
+        <input
+          type={item.type}
+          value={item.value}
+          className={`field__input ${item.msg && "field__input--error"}`}
+          onChange={handleChange}
+          name={item.param}
+          autoComplete='off'
+        />
+        <span className={`error ${item.msg && "error--active"}`}>
+          <AiOutlineWarning className='error__icon' />
+          <span className='error__name'>{item.msg}</span>
+        </span>
+      </label>
+    )
+  })
+
+  const formPurchase = (
+    <div className={`purchase-form ${popup && "purchase-form--open"}`}>
+      <h3 className='purchase-form__title'>Purchase orders</h3>
+      <form onSubmit={handleSubmit}>
+        {fields}
+        <button className='btn-handler'></button>
+        <span>Total price: {generalPrice}</span>
+      </form>
+      <div className='purchase-form__btns'>
+        <button className='btn btn-primary' onClick={handleSubmit}>
+          <BsPlus className='btn__icon' />
+          <span className='btn__name'>Buy/Book</span>
+        </button>
+        <button
+          className='btn btn-simple'
+          onClick={() => dispatch({ type: TOGGLE_POPUP_MENU })}
+        >
+          <BsX className='btn__icon' />
+          <span className='btn__name'>Cancel</span>
+        </button>
+      </div>
+    </div>
+  )
+
   return (
     <div className='wrapper'>
       <div className='ordered-items'>
         <div className='title-orders'>All bookings</div>
-        {bookingsItems}
+        {bookingsItems.length ? (
+          bookingsItems
+        ) : (
+          <div className='plug-text'>Empty</div>
+        )}
         <div className='title-orders'>Order list</div>
-        {orderListItems}
-        <div className='purchase'>
-          <div className='purchase__label'>
-            General price:
-            <span className='purchase__price'>{generalPrice}</span>
+        {orderListItems.length ? (
+          orderListItems
+        ) : (
+          <div className='plug-text'>Empty</div>
+        )}
+        {formPurchase}
+        {(!!bookings.length || !!orderList.length) && (
+          <div className='purchase'>
+            <div className='purchase__label'>
+              General price:
+              <span className='purchase__price'>{generalPrice}</span>
+            </div>
+            <div className='purchase__container-btn'>
+              <button
+                className='purchase__btn btn btn-primary'
+                onClick={() => dispatch({ type: TOGGLE_POPUP_MENU })}
+              >
+                <span className='btn__name'>Purchase</span>
+                <BsArrowRight className='btn__icon' />
+              </button>
+            </div>
           </div>
-          <div className='purchase__container-btn'>
-            <button
-              className='purchase__btn btn btn-primary'
-              onClick={() => dispatch({ type: TOGGLE_POPUP_MENU })}
-            >
-              <span className='btn__name'>Purchase</span>
-              <BsArrowRight className='btn__icon' />
-            </button>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   )
