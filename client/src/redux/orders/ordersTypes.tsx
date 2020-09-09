@@ -3,6 +3,7 @@ export const REMOVE_CART_BOOKING = "REMOVE_CART_BOOKING"
 export const ADD_CART_ORDER = "ADD_CART_ORDER"
 export const REMOVE_CART_ORDER = "REMOVE_CART_ORDER"
 export const SET_ORDERS = "SET_ORDERS"
+export const CHANGE_QUANTITY_ORDERS = "CHANGE_QUANTITY_ORDERS"
 
 interface Time {
   _id: string
@@ -26,6 +27,11 @@ export interface AddCartOrderPayload {
   quantity: string
   variant: string
   _id: string
+}
+
+export interface QuantityChangePayload {
+  id: string
+  value: string
 }
 
 interface Orders {
@@ -58,9 +64,15 @@ export interface SetOrders {
   payload: Orders
 }
 
+export interface ChangeQuantityOrders {
+  type: typeof CHANGE_QUANTITY_ORDERS
+  payload: QuantityChangePayload
+}
+
 export type OrderReducerTypes =
   | AddCartBooking
   | AddCartOrder
   | RemoveCartBooking
   | RemoveCartOrder
   | SetOrders
+  | ChangeQuantityOrders

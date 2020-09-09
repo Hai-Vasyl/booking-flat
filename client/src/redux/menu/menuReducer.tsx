@@ -1,11 +1,18 @@
-import { TOGGLE_DROP_MENU, RESET_MENU, MenuReducerTypes } from "./menuTypes"
+import {
+  TOGGLE_DROP_MENU,
+  RESET_MENU,
+  TOGGLE_POPUP_MENU,
+  MenuReducerTypes,
+} from "./menuTypes"
 
 interface InitialState {
   drop: boolean
+  popup: boolean
 }
 
 const initialState: InitialState = {
   drop: false,
+  popup: false,
 }
 
 const menuReducer = (
@@ -21,6 +28,12 @@ const menuReducer = (
     case RESET_MENU:
       return {
         drop: false,
+        popup: false,
+      }
+    case TOGGLE_POPUP_MENU:
+      return {
+        ...state,
+        popup: !state.popup,
       }
     default:
       return state

@@ -22,7 +22,7 @@ import { RESET_MENU } from "../redux/menu/menuTypes"
 const Routes: React.FC = () => {
   const {
     auth: { userData },
-    menu: { drop },
+    menu: { drop, popup },
   } = useSelector((state: RootStore) => state)
   const dispatch = useDispatch()
 
@@ -31,7 +31,9 @@ const Routes: React.FC = () => {
       <Navbar />
       <div
         onClick={() => dispatch({ type: RESET_MENU })}
-        className={`background-popup ${drop && "background-popup--active"}`}
+        className={`background-popup ${
+          (drop || popup) && "background-popup--active"
+        }`}
       ></div>
       {userData.token ? (
         userData.user.typeUser === "admin" ? (

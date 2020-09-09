@@ -790,3 +790,118 @@ $transitions: (
     color: getColor(primary);
   }
 }
+
+.booking-item {
+  display: flex;
+  padding: 10px;
+  border-bottom: 1px solid getColor(secondary);
+  margin-bottom: 1em;
+  &__container-img {
+    width: 140px;
+    height: 140px;
+    display: block;
+  }
+  &__img {
+    width: 100%;
+    height: 100%;
+    overflow: cover;
+    display: block;
+  }
+  &__info {
+    flex: 1;
+    padding: 0px 10px;
+  }
+  &__name {
+    text-decoration: none;
+    color: getColor(primary);
+    font-weight: bold;
+    display: block;
+    margin-bottom: 10px;
+  }
+  &__paragraph {
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+  }
+  &__numberRooms {
+  }
+  &__price {
+  }
+  &__date {
+    border: 1px solid getColor(secondary);
+    align-self: flex-start;
+    font-size: 0.9em;
+    padding: 5px;
+    border-radius: 4px;
+  }
+  &__settlement {
+    display: block;
+  }
+  &__eviction {
+    display: block;
+  }
+  &__btn-container {
+    display: flex;
+  }
+  &__btn {
+    margin: auto;
+    border-radius: 50%;
+    display: flex;
+    font-size: 1.1em;
+    & > * {
+      margin: auto;
+    }
+  }
+}
+
+.order-item {
+  &__container-img {
+    border-radius: 50%;
+    border: 1px solid getColor(secondary);
+    padding: 5px;
+  }
+  &__img {
+    border-radius: 50%;
+    border: 1px solid getColor(secondary);
+  }
+  &__quantity {
+  }
+  &__quantity-input {
+    border: 1px solid getColor(secondary);
+    text-align: center;
+    border-radius: none;
+    margin-left: 6px;
+    outline: 2px solid transparent;
+    position: relative;
+    &:focus {
+      z-index: 2;
+      outline-color: getColor(focus);
+    }
+  }
+}
+
+.title-orders {
+  text-align: center;
+  font-size: 1.2em;
+  border-top: 1px dashed getColor(secondary);
+  border-bottom: 1px dashed getColor(secondary);
+  padding: 10px 0;
+  margin: 10px 0;
+}
+
+.purchase {
+  display: flex;
+  justify-content: center;
+  padding-top: 1em;
+  &__label {
+    border: 1px solid getColor(secondary);
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    padding: 0px 15px;
+  }
+  &__price {
+    margin-left: 7px;
+    font-weight: bold;
+  }
+}

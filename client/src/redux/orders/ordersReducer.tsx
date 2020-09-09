@@ -7,7 +7,9 @@ import {
   ADD_CART_ORDER,
   REMOVE_CART_ORDER,
   SET_ORDERS,
+  CHANGE_QUANTITY_ORDERS,
 } from "./ordersTypes"
+import { AiOutlineOrderedList } from "react-icons/ai"
 
 interface InitialState {
   bookings: AddCartBookingPayload[]
@@ -48,6 +50,20 @@ const ordersReducer = (
       }
     case SET_ORDERS:
       return action.payload
+    case CHANGE_QUANTITY_ORDERS:
+      const { value, id } = action.payload
+
+      const newOrderList = state.orderList.map((item) => {
+        if (item._id === id) {
+          return { ...item, quantity: value }
+        }
+        return item
+      })
+
+      return {
+        ...state,
+        orderList: newOrderList,
+      }
     default:
       return state
   }

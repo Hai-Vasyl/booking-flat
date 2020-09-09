@@ -156,7 +156,7 @@ const Filter: React.FC = () => {
 
     if (form.type === "flats") {
       bookings.forEach((item) => {
-        if (item._id === id && item.time._id == timeId) {
+        if (item._id === id && item.time._id === timeId) {
           isInclude = true
         }
       })
