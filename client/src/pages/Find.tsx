@@ -157,11 +157,19 @@ const Find = () => {
       <div className='found-items'>
         <div>
           <h3 className='found-items__title'>All bookings by searched buyer</h3>
-          {bookingsItems}
+          {bookingsItems.length ? (
+            bookingsItems
+          ) : (
+            <div className='plug-text'>Empty</div>
+          )}
         </div>
         <div>
           <h3 className='found-items__title'>All orders by searched buyer</h3>
-          {orderListItems}
+          {orderListItems.length ? (
+            orderListItems
+          ) : (
+            <div className='plug-text'>Empty</div>
+          )}
         </div>
       </div>
     </div>

@@ -23,7 +23,7 @@ import { RESET_MENU } from "../redux/menu/menuTypes"
 const Routes: React.FC = () => {
   const {
     auth: { userData },
-    menu: { drop, popup },
+    menu: { drop, popup, dropMenu },
   } = useSelector((state: RootStore) => state)
   const dispatch = useDispatch()
 
@@ -33,7 +33,7 @@ const Routes: React.FC = () => {
       <div
         onClick={() => dispatch({ type: RESET_MENU })}
         className={`background-popup ${
-          (drop || popup) && "background-popup--active"
+          (drop || popup || dropMenu) && "background-popup--active"
         }`}
       ></div>
       {userData.token ? (
@@ -78,10 +78,10 @@ const Routes: React.FC = () => {
       ) : (
         <Switch>
           <Route exact path='/' component={Main} />
-          <Route path='/orders-vouchers' component={OrderBookings} />
+          <Route path='/orders' component={OrderBookings} />
+          <Route path='/filter' component={Filter} />
           <Route path='/auth' component={Auth} />
 
-          <Route path='/filter/:filterString' component={Filter} />
           <Route path='/details/flat/:flatId' component={DetailsFlat} />
           <Route
             path='/details/voucher/:voucherId'

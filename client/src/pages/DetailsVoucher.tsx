@@ -139,7 +139,7 @@ const DetailsVoucher = () => {
               </span>
             </span>
           </Link>
-          {userData.user._id === data.owner._id && (
+          {userData.user && userData.user._id === data.owner._id && (
             <Link to={`/edit-voucher/${voucherId}`} className='btn btn-primary'>
               <BsPencilSquare className='btn__icon' />
               <span className='btn__name'>Edit voucher</span>

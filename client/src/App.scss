@@ -377,6 +377,9 @@ $transitions: (
   padding: 7px;
   background-color: getColor(accent);
   box-shadow: getShadows(light);
+  &--disabled {
+    background-color: getColor(bg-danger);
+  }
   &:last-child {
     border-bottom-color: getColor(secondary);
   }
@@ -433,6 +436,18 @@ $transitions: (
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    height: 52px;
+  }
+  &__drop-menu {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  &__btn-menu {
+    display: none;
+    border: none;
+    color: getColor(accent);
+    font-size: 1.7em;
   }
 }
 
@@ -444,8 +459,7 @@ $transitions: (
   text-decoration: none;
   padding: 15px 13px;
   transition: getTransition(smooth);
-  border-top: 1px solid transparent;
-  border-bottom: 1px solid transparent;
+  border: 1px solid transparent;
   &--active {
     border-top-color: getColor(danger);
     &:hover {
@@ -494,8 +508,6 @@ $transitions: (
     object-fit: cover;
     border-radius: 50%;
   }
-  &__name {
-  }
   &__container {
     position: absolute;
     top: 52px;
@@ -532,6 +544,7 @@ $transitions: (
     width: 50%;
     display: flex;
     justify-content: flex-end;
+    padding-left: 50px;
     align-items: center;
   }
   &__bg-image {
@@ -689,6 +702,226 @@ $transitions: (
   &__settlement {
   }
   &__eviction {
+  }
+}
+
+@media (max-width: 850px) {
+  .nav {
+    &__drop-menu {
+      width: 200px;
+      border: 1px solid getColor(secondary);
+      position: absolute;
+      top: 52px;
+      flex-direction: column;
+      background-color: getColor(accent);
+      opacity: 0;
+      visibility: hidden;
+      transition: smooth;
+      &--drop {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+    &__btn-menu {
+      display: flex;
+      &:hover {
+        box-shadow: none;
+      }
+      &:active {
+        transform: none;
+      }
+    }
+  }
+  .link:not(.link__logo) {
+    width: 100%;
+    color: getColor(primary);
+    &:hover {
+      background-color: getColor(secondary);
+    }
+  }
+  .link--active {
+    border-top-color: transparent;
+    border-left-color: getColor(danger);
+    &:hover {
+      background-color: getColor(accent) !important;
+    }
+  }
+  .drop-menu {
+    width: 200px;
+    &__btn {
+      display: none;
+    }
+    &__container {
+      position: relative;
+      top: 0px;
+      right: 0;
+      width: 100%;
+      background-color: transparent;
+      transition: none;
+      border: none;
+      transform: scale(1);
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+  .main {
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    &__content {
+      width: 100%;
+      padding: 2em 50px;
+    }
+    &__bg-image {
+      width: 100%;
+      height: 40vh;
+    }
+    &__info {
+      width: 100%;
+      padding-right: 0px;
+    }
+    &__title {
+      font-size: 1.7em;
+    }
+  }
+  .flat-item {
+    display: flex;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    // flex-direction: column;
+    border: 1px solid black;
+    margin-bottom: 1.5em;
+    width: 900px;
+    max-width: 100%;
+
+    &__image-side {
+      width: 250px;
+      height: 250px;
+      display: block;
+      position: relative;
+    }
+    &__info {
+      flex: 1;
+      padding: 15px;
+      position: relative;
+    }
+    &__date-slots {
+      flex: 1;
+      border-left: 1px solid getColor(secondary);
+    }
+    &__image {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    &__price {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 10px 0;
+      color: getColor(accent);
+      background-color: getColor(bg-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    &__grivna-sign {
+      margin-left: 6px;
+      font-size: 0.9em;
+    }
+    &__title {
+      text-decoration: none;
+      color: getColor(primary);
+      font-size: 1.3em;
+      font-weight: bold;
+    }
+    &__paragraph {
+      padding: 10px 0;
+      margin: 1em 0;
+    }
+    &__owner {
+      display: flex;
+      align-items: center;
+      border: 1px solid getColor(secondary);
+      text-decoration: none;
+      color: getColor(primary);
+      padding: 5px;
+      border-radius: 10px;
+      position: absolute;
+      bottom: 15px;
+    }
+    &__avatar {
+      display: block;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      padding: 5px;
+      border: 1px solid getColor(secondary);
+    }
+    &__img-ava {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 1px solid getColor(secondary);
+    }
+    &__fullname {
+      padding: 0px 15px;
+    }
+    &__firstname {
+      margin-right: 6px;
+    }
+    &__lastname {
+    }
+    &__slot {
+      padding: 5px 0;
+      display: block;
+      width: 100%;
+      border: 1px solid transparent;
+      border-bottom-color: getColor(secondary);
+      transition: getTransition(smooth);
+      background-color: getColor(accent);
+      &:hover {
+        border-color: getColor(danger);
+      }
+      &--booked {
+        background-color: getColor(bg-danger);
+      }
+      &--ordered {
+        background-color: getColor(success);
+      }
+    }
+    &__settlement,
+    &__eviction {
+      display: inline-block;
+      width: 100px;
+      padding: 5px;
+      border: 1px solid getColor(secondary);
+      border-radius: 5px;
+    }
+    &__settlement {
+    }
+    &__eviction {
+    }
+  }
+}
+
+@media (max-width: 550px) {
+  .wrapper {
+    padding: 9px 20px;
+    padding-bottom: 20px;
+  }
+  .main {
+    &__content {
+      padding: 2em 20px;
+    }
+  }
+  .nav {
+    &__menu {
+      padding: 0px 20px;
+    }
   }
 }
 

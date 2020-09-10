@@ -174,7 +174,7 @@ const DetailsFlat = () => {
               )
             })}
           </div>
-          {userData.user._id === data.owner._id && (
+          {userData.user && userData.user._id === data.owner._id && (
             <Link
               to={`/edit-flat/${flatId}`}
               className='flat__edit btn btn-primary'
@@ -197,7 +197,7 @@ const DetailsFlat = () => {
                 {data.description}
               </p>
               <span className='flat__info-item'>
-                <span className='flat__title'>Number of rooms:</span>{" "}
+                <span className='flat__title'>Number of rooms:</span>
                 {data.numberRooms}
               </span>
               <Link to={`/user/${data.owner._id}`} className='flat__owner'>
@@ -250,7 +250,7 @@ const DetailsFlat = () => {
               )
             })}
           </div>
-          {userData.user._id === data.owner._id && (
+          {userData.user && userData.user._id === data.owner._id && (
             <Link
               to={`/create-voucher/${flatId}`}
               className='flat__create btn btn-primary'

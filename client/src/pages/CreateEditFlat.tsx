@@ -37,6 +37,7 @@ interface TimeSlots {
   _id: number
   settlement: string
   eviction: string
+  bookedStatus: boolean
 }
 
 type StatusDates = {
@@ -223,6 +224,7 @@ const CreateEditFlat: React.FC = () => {
       {
         settlement: settlement.value,
         eviction: eviction.value,
+        bookedStatus: false,
         _id: Date.now(),
       },
     ])
@@ -327,15 +329,20 @@ const CreateEditFlat: React.FC = () => {
 
   const timeRangeSlots = timeRanges.map((item) => {
     return (
-      <div key={item._id} className='time-slot'>
+      <div
+        key={item._id}
+        className={`time-slot ${item.bookedStatus && "time-slot--disabled"}`}
+      >
         <span className='time-slot__date'>{item.settlement}</span>-
         <span className='time-slot__date'>{item.eviction}</span>
-        <button
-          className='time-slot__btn-delete'
-          onClick={() => handleDeleteSlot(item._id)}
-        >
-          <BsX />
-        </button>
+        {!item.bookedStatus && (
+          <button
+            className='time-slot__btn-delete'
+            onClick={() => handleDeleteSlot(item._id)}
+          >
+            <BsX />
+          </button>
+        )}
       </div>
     )
   })

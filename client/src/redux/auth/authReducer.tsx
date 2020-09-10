@@ -6,6 +6,7 @@ import {
   FETCH_FAILURE_AUTH,
   CLEAR_ERROR_AUTH,
   SET_AUTH,
+  RESET_AUTH,
   AuthReducerTypes,
 } from "./authTypes"
 
@@ -75,6 +76,9 @@ const authReducer = (
         ...state,
         userData: auth,
       }
+    case RESET_AUTH:
+      localStorage.removeItem("auth")
+      return initialState
     default:
       return state
   }
