@@ -8,6 +8,8 @@ import {
   REMOVE_CART_BOOKING,
   ADD_CART_BOOKING,
 } from "../redux/orders/ordersTypes"
+import { Link } from "react-router-dom"
+import { BsPencilSquare, BsPlus } from "react-icons/bs"
 
 interface PropsParams {
   flatId: string
@@ -70,6 +72,7 @@ const DetailsFlat = () => {
   const { flatId } = useParams<PropsParams>()
   const {
     orders: { bookings },
+    auth: { userData },
   } = useSelector((state: RootStore) => state)
   const dispatch = useDispatch()
   const [indexOrder, setIndexOrder] = useState<IndexOrder>({
@@ -86,7 +89,6 @@ const DetailsFlat = () => {
           data: null,
         })
 
-        console.log(res.data)
         setData(res.data)
       } catch (error) {}
     }
@@ -172,23 +174,91 @@ const DetailsFlat = () => {
               )
             })}
           </div>
+          {userData.user._id === data.owner._id && (
+            <Link
+              to={`/edit-flat/${flatId}`}
+              className='flat__edit btn btn-primary'
+            >
+              <BsPencilSquare className='btn__icon' />
+              <span className='btn__name'>Edit flat</span>
+            </Link>
+          )}
         </div>
 
         <div className='flat__right-side'>
           <div>
             <h3 className='flat__name'>{data.name}</h3>
             <div>
-              <span className='flat__info-item'>Price: {data.price}</span>
-              <p>
-                <span>Description:</span>
+              <span className='flat__info-item'>
+                <span className='flat__title'>Price:</span> {data.price}
+              </span>
+              <p className='flat__paragraph'>
+                <span className='flat__title'>Description:</span>
                 {data.description}
               </p>
               <span className='flat__info-item'>
-                Number of rooms: {data.numberRooms}
+                <span className='flat__title'>Number of rooms:</span>{" "}
+                {data.numberRooms}
               </span>
+              <Link to={`/user/${data.owner._id}`} className='flat__owner'>
+                <div className='flat__avatar'>
+                  <img
+                    className='flat__ava-img'
+                    src={data.owner.ava}
+                    alt='userAva'
+                  />
+                </div>
+                <div className='flat__fullname'>
+                  <span className='flat__firstname'>
+                    {data.owner.firstname}
+                  </span>
+                  <span className='flat__lastname'>{data.owner.lastname}</span>
+                </div>
+              </Link>
             </div>
           </div>
-          <div></div>
+          <div className='flat__title-simple'>
+            All available vouchers for this flat
+          </div>
+          <div className='flat__container-vouchers'>
+            {data.vouchers.map((item) => {
+              return (
+                <div key={item._id} className='voucher-link'>
+                  <Link
+                    to={`/details/voucher/${item._id}`}
+                    className='voucher-link__image-side'
+                  >
+                    <img
+                      className='voucher-link__image'
+                      src={item.image}
+                      alt='imageVoucher'
+                    />
+                  </Link>
+                  <div className='voucher-link__info'>
+                    <Link
+                      className='voucher-link__title'
+                      to={`/details/voucher/${item._id}`}
+                    >
+                      {item.name}
+                    </Link>
+                    <p className='voucher-link__paragraph'>
+                      <span>Price: {item.price}</span>
+                      <span>Variant: {item.variant}</span>
+                    </p>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+          {userData.user._id === data.owner._id && (
+            <Link
+              to={`/create-voucher/${flatId}`}
+              className='flat__create btn btn-primary'
+            >
+              <BsPlus className='btn__icon' />
+              <span className='btn__name'>Create voucher</span>
+            </Link>
+          )}
         </div>
       </div>
     </div>

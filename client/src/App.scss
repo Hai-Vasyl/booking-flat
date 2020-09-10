@@ -804,7 +804,7 @@ $transitions: (
   &__img {
     width: 100%;
     height: 100%;
-    overflow: cover;
+    object-fit: cover;
     display: block;
   }
   &__info {
@@ -963,14 +963,176 @@ $transitions: (
   &__container-slots {
     border: 1px solid getColor(secondary);
     height: 25vh;
+    overflow-y: auto;
   }
-
   &__name {
     font-size: 1.8em;
   }
   &__info-item {
     display: block;
+    padding: 1em 0;
+    font-weight: bold;
+  }
+  &__paragraph {
+    border: 1px dashed getColor(secondary);
+    border-right: none;
+    border-left: none;
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+  }
+  &__owner {
+    display: flex;
+    text-decoration: none;
     border: 1px solid getColor(secondary);
-    padding: 15px;
+    padding: 10px;
+    color: getColor(primary);
+    margin: 1em 0px;
+  }
+  &__avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    padding: 5px;
+    border: 1px solid getColor(secondary);
+  }
+  &__ava-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  &__fullname {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+  }
+  &__firstname {
+    margin-right: 10px;
+  }
+  &__lastname {
+  }
+  &__title {
+    font-weight: normal;
+    padding: 5px 0;
+  }
+  &__container-vouchers {
+    border: 1px solid getColor(secondary);
+  }
+  &__title-simple {
+    text-align: center;
+    padding: 5px 0;
+    font-size: 1.1em;
+  }
+}
+
+.voucher-link {
+  display: flex;
+  border-bottom: 1px solid getColor(secondary);
+  padding: 10px;
+
+  &__image-side {
+    width: 100px;
+    height: 100px;
+    display: block;
+    border-radius: 50%;
+    border: 1px solid getColor(secondary);
+    padding: 4px;
+  }
+  &__image {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  &__info {
+    padding: 0px 15px;
+  }
+  &__title {
+    text-decoration: none;
+    color: getColor(primary);
+    font-weight: bold;
+  }
+  &__paragraph {
+    display: flex;
+    font-size: 0.9em;
+    margin-top: 0.5em;
+    flex-direction: column;
+  }
+}
+
+.voucher {
+  display: flex;
+  &__left-side {
+    width: 50%;
+  }
+  &__right-side {
+    width: 50%;
+    font-size: 1.1em;
+    padding: 0px 20px;
+  }
+  &__container-img {
+  }
+  &__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  &__name {
+    font-size: 1.5em;
+    margin-bottom: 0.5em;
+  }
+  &__info {
+    display: flex;
+    font-weight: bold;
+    padding: 0.7em 0;
+  }
+  &__field {
+    font-weight: normal;
+    margin-right: 10px;
+  }
+  &__paragraph {
+    flex-direction: column;
+    border-top: 1px dashed getColor(secondary);
+    border-bottom: 1px dashed getColor(secondary);
+    font-weight: normal;
+    .voucher__field {
+      padding-bottom: 10px;
+    }
+  }
+}
+
+.flat-link {
+  display: flex;
+  padding: 10px;
+  border: 1px solid getColor(secondary);
+  text-decoration: none;
+  color: getColor(primary);
+  margin-top: 1em;
+  &__container-img {
+    width: 120px;
+    height: 120px;
+    display: block;
+  }
+  &__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  &__info {
+    display: flex;
+    flex-direction: column;
+    padding: 0px 10px;
+  }
+  &__name {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 10px;
+  }
+  &__field {
   }
 }

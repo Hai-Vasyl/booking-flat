@@ -3,15 +3,6 @@ const Voucher = require("../models/Voucher")
 
 exports.voucher_create = async (req, res) => {
   try {
-    // const {
-    //   name,
-    //   description,
-    //   image,
-    //   price,
-    //   variant,
-    //   quantity,
-    //   apartment,
-    // } = req.body
     const { userId } = req
 
     let voucher = new Voucher({ ...req.body, owner: userId })
@@ -112,5 +103,21 @@ exports.vouchers_get = async (req, res) => {
     res.json(vouchers)
   } catch (error) {
     res.status(400).json(`Vouchers getting error: ${error.message}`)
+  }
+}
+
+exports.voucher_details_get = async (req, res) => {
+  try {
+    const { voucherId } = req.params
+    const voucher = await Voucher.findById(voucherId)
+      .populate({
+        path: "owner",
+        select: "firstname lastname ava",
+      })
+      .populate({ path: "apartment", select: "name image price numberRooms" })
+
+    res.json(voucher)
+  } catch (error) {
+    res.status(400).json(`Voucher details getting error: ${error.message}`)
   }
 }

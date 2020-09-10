@@ -28,9 +28,21 @@ const ordersReducer = (
 ): InitialState => {
   switch (action.type) {
     case ADD_CART_BOOKING:
+      const { _id, settlement, eviction } = action.payload.time
+
+      let isInclude = false
+      const newBookings = state.bookings.map((item) => {
+        if (item._id === action.payload._id) {
+          isInclude = true
+          return { ...item, time: { _id, settlement, eviction } }
+        }
+        return item
+      })
       return {
         ...state,
-        bookings: [{ ...action.payload }, ...state.bookings],
+        bookings: isInclude
+          ? newBookings
+          : [{ ...action.payload }, ...state.bookings],
       }
     case REMOVE_CART_BOOKING:
       return {
