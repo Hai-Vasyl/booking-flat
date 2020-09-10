@@ -78,7 +78,6 @@ const DetailsVoucher = () => {
           data: null,
         })
 
-        console.log(res.data)
         setData(res.data)
       } catch (error) {}
     }

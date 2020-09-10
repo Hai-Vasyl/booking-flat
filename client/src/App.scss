@@ -1136,3 +1136,26 @@ $transitions: (
   &__field {
   }
 }
+
+.found-items {
+  &__title {
+    text-align: center;
+    padding: 1.5em 0;
+  }
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  position: relative;
+  &__icon {
+    position: absolute;
+    width: 40px;
+    height: 34px;
+    pointer-events: none;
+    border-left: none;
+    padding: 5px;
+    right: 0;
+    color: getColor(secondary);
+  }
+}

@@ -8,6 +8,7 @@ import DetailsVoucher from "../pages/DetailsVoucher"
 import OrderBookings from "../pages/OrderBookings"
 import User from "../pages/User"
 import Filter from "../pages/Filter"
+import Find from "../pages/Find"
 import Navbar from "../components/Navbar"
 import {
   BrowserRouter as Router,
@@ -42,6 +43,7 @@ const Routes: React.FC = () => {
             <Route path='/create-flat' component={CreateEditFlat} />
             <Route path='/orders' component={OrderBookings} />
             <Route path='/filter' component={Filter} />
+            <Route path='/find-buyer' component={Find} />
 
             <Route path='/edit-flat/:flatId' component={CreateEditFlat} />
             <Route path='/create-voucher/:id' component={CreateEditVoucher} />
