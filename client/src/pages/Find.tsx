@@ -156,7 +156,7 @@ const Find = () => {
 
       <div className='found-items'>
         <div>
-          <h3 className='found-items__title'>All bookings by searched buyer</h3>
+          <h3 className='title-orders'>All bookings by searched buyer</h3>
           {bookingsItems.length ? (
             bookingsItems
           ) : (
@@ -164,7 +164,7 @@ const Find = () => {
           )}
         </div>
         <div>
-          <h3 className='found-items__title'>All orders by searched buyer</h3>
+          <h3 className='title-orders'>All orders by searched buyer</h3>
           {orderListItems.length ? (
             orderListItems
           ) : (

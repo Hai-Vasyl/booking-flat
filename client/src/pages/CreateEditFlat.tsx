@@ -59,13 +59,14 @@ const CreateEditFlat: React.FC = () => {
   const { flatId } = useParams<PropsParams>()
   const [isFormFlipped, setIsFormFlipped] = useState(false)
   const [message, setMessage] = useState("")
-  const [form, setForm] = useState<FormItem[]>([
+  const initialForm = [
     { param: "name", msg: "", name: "Name", value: "" },
     { param: "description", msg: "", name: "Description", value: "" },
     { param: "image", msg: "", name: "Image", value: "" },
     { param: "price", msg: "", name: "Price", value: "" },
     { param: "numberRooms", msg: "", name: "Number of rooms", value: "" },
-  ])
+  ]
+  const [form, setForm] = useState<FormItem[]>(initialForm)
   const [timeForm, setTimeForm] = useState<TimeRange[]>([
     {
       param: "settlement",
@@ -110,10 +111,13 @@ const CreateEditFlat: React.FC = () => {
       } catch (error) {}
     }
 
-    if (!flatId) {
-      return
+    if (flatId) {
+      fetchData()
+    } else {
+      setForm(initialForm)
+      setTimeRanges([])
+      setIsFormFlipped(false)
     }
-    fetchData()
   }, [flatId])
 
   const onFlip = (
@@ -294,7 +298,7 @@ const CreateEditFlat: React.FC = () => {
 
   const timeForms = timeForm.map((item) => {
     return (
-      <label className='field' key={item.param}>
+      <label className='field field-date' key={item.param}>
         <span className='field__name field__date-name'>{item.param}</span>
         <input
           type='date'
@@ -404,15 +408,17 @@ const CreateEditFlat: React.FC = () => {
             }`}
           >
             <div className='form-flat__date'>
-              {timeForms}
-              <button
-                className={`form-flat__btn-add-time ${
-                  isEmptyFields && "form-flat__btn-add-time--disabled"
-                }`}
-                onClick={isEmptyFields ? () => {} : handleAddTime}
-              >
-                <BsPlus />
-              </button>
+              <div className='form-flat__date-fields'>
+                {timeForms}
+                <button
+                  className={`form-flat__btn-add-time ${
+                    isEmptyFields && "form-flat__btn-add-time--disabled"
+                  }`}
+                  onClick={isEmptyFields ? () => {} : handleAddTime}
+                >
+                  <BsPlus />
+                </button>
+              </div>
               <span
                 className={`form-flat__error error ${
                   message && "error--active"

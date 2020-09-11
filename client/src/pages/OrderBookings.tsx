@@ -58,10 +58,13 @@ const OrderBookings = () => {
     id: string
   ) => {
     const { value } = event.target
-    dispatch({
-      type: CHANGE_QUANTITY_ORDERS,
-      payload: { value, id },
-    })
+
+    if (event.target.value.match("^[0-9]*$") !== null) {
+      dispatch({
+        type: CHANGE_QUANTITY_ORDERS,
+        payload: { value, id },
+      })
+    }
   }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -210,7 +213,7 @@ const OrderBookings = () => {
             <span className='order-item__quantity'>
               Quantity:
               <input
-                className='order-item__quantity-input'
+                className='order-item__quantity-input field__input'
                 value={item.quantity}
                 type='text'
                 onChange={(event) => handleChangeQuantity(event, item._id)}
