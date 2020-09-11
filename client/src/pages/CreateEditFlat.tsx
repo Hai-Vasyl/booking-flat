@@ -118,7 +118,7 @@ const CreateEditFlat: React.FC = () => {
       setTimeRanges([])
       setIsFormFlipped(false)
     }
-  }, [flatId])
+  }, [flatId, initialForm])
 
   const onFlip = (
     event:

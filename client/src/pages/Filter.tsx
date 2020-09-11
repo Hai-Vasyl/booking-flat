@@ -38,6 +38,10 @@ interface Data {
   variant: string
 }
 
+interface CompareItem extends Data {
+  [key: string]: any
+}
+
 interface Form {
   type: string
   pricefrom: string
@@ -57,6 +61,8 @@ const Filter: React.FC = () => {
   } = useSelector((state: RootStore) => state)
 
   const [data, setData] = useState<Data[]>([])
+  const [sortType, setSortType] = useState("price")
+  const [sortBehaviour, setSortBehaviour] = useState(true)
   const [messageDate, setMessageDate] = useState("")
   const [form, setForm] = useState<Form>({
     type: "",
@@ -99,6 +105,23 @@ const Filter: React.FC = () => {
 
     fetchData()
   }, [location])
+
+  useEffect(() => {
+    const compare = (firstItem: CompareItem, secondItem: CompareItem) => {
+      const item1 = firstItem[sortType]
+      const item2 = secondItem[sortType]
+
+      if (item1 > item2) {
+        return sortBehaviour ? 1 : -1
+      } else if (item1 < item2) {
+        return sortBehaviour ? -1 : 1
+      } else {
+        return 0
+      }
+    }
+
+    setData((prevData) => prevData.sort(compare))
+  }, [sortType, sortBehaviour])
 
   const handleChangeField = (event: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [event.target.name]: event.target.value })
@@ -169,6 +192,14 @@ const Filter: React.FC = () => {
     }
 
     return isInclude
+  }
+
+  const handleChangeSort = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortType(event.target.value)
+  }
+
+  const handleChangeSortType = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSortBehaviour(!sortBehaviour)
   }
 
   const handleOrder = (
@@ -344,7 +375,6 @@ const Filter: React.FC = () => {
               />
               <span className='sort-panel__name'>Apartments</span>
             </label>
-
             <label className='sort-panel__label-radio'>
               <input
                 type='radio'
@@ -419,32 +449,77 @@ const Filter: React.FC = () => {
         {form.type === "vouchers" && (
           <div className='sort-panel__block'>
             <span className='sort-panel__title'>Variant:</span>
-            <form className='sort-panel__form'>
-              <select
-                className='sort-panel__btn sort-panel__select'
-                value={form.variant}
-                name='variant'
-                onChange={handleChange}
-              >
-                <option className='sort-panel__option' value='all'>
-                  All
-                </option>
-                <option className='sort-panel__option' value='restaurant'>
-                  Restaurant
-                </option>
-                <option className='sort-panel__option' value='club'>
-                  Club
-                </option>
-                <option className='sort-panel__option' value='museum'>
-                  Museum
-                </option>
-                <option className='sort-panel__option' value='cinema'>
-                  Cinema
-                </option>
-              </select>
-            </form>
+            <select
+              className='sort-panel__btn sort-panel__select'
+              value={form.variant}
+              name='variant'
+              onChange={handleChange}
+            >
+              <option className='sort-panel__option' value='all'>
+                All
+              </option>
+              <option className='sort-panel__option' value='restaurant'>
+                Restaurant
+              </option>
+              <option className='sort-panel__option' value='club'>
+                Club
+              </option>
+              <option className='sort-panel__option' value='museum'>
+                Museum
+              </option>
+              <option className='sort-panel__option' value='cinema'>
+                Cinema
+              </option>
+            </select>
           </div>
         )}
+        <div className='sort-panel__block'>
+          <span className='sort-panel__title'>Sort by:</span>
+          <form>
+            <label className='sort-panel__label-radio'>
+              <input
+                type='radio'
+                onChange={handleChangeSortType}
+                className='sort-panel__radio'
+                checked={sortBehaviour}
+              />
+              <span className='sort-panel__name'>Descending</span>
+            </label>
+            <label className='sort-panel__label-radio'>
+              <input
+                type='radio'
+                onChange={handleChangeSortType}
+                className='sort-panel__radio'
+                checked={!sortBehaviour}
+              />
+              <span className='sort-panel__name'>Ascending</span>
+            </label>
+          </form>
+          <select
+            value={sortType}
+            onChange={handleChangeSort}
+            className='sort-panel__btn sort-panel__select'
+          >
+            {form.type === "flats" && (
+              <option value='numberRooms' className='sort-panel__option'>
+                Number of rooms
+              </option>
+            )}
+            <option value='price' className='sort-panel__option'>
+              Price
+            </option>
+            {form.type === "vouchers" && (
+              <>
+                <option value='quantity' className='sort-panel__option'>
+                  Quantity
+                </option>
+                <option value='variant' className='sort-panel__option'>
+                  Variant
+                </option>
+              </>
+            )}
+          </select>
+        </div>
       </div>
       <div className='filtered-items'>
         {form.type === "flats" ? flats : vouchers}

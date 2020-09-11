@@ -807,6 +807,7 @@ $transitions: (
     cursor: pointer;
     border: none;
     outline: none;
+    width: 150px;
   }
   &__option {
     background-color: getColor(accent);
