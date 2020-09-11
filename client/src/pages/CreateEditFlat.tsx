@@ -59,14 +59,8 @@ const CreateEditFlat: React.FC = () => {
   const { flatId } = useParams<PropsParams>()
   const [isFormFlipped, setIsFormFlipped] = useState(false)
   const [message, setMessage] = useState("")
-  const initialForm = [
-    { param: "name", msg: "", name: "Name", value: "" },
-    { param: "description", msg: "", name: "Description", value: "" },
-    { param: "image", msg: "", name: "Image", value: "" },
-    { param: "price", msg: "", name: "Price", value: "" },
-    { param: "numberRooms", msg: "", name: "Number of rooms", value: "" },
-  ]
-  const [form, setForm] = useState<FormItem[]>(initialForm)
+
+  const [form, setForm] = useState<FormItem[]>([])
   const [timeForm, setTimeForm] = useState<TimeRange[]>([
     {
       param: "settlement",
@@ -111,14 +105,20 @@ const CreateEditFlat: React.FC = () => {
       } catch (error) {}
     }
 
+    setForm([
+      { param: "name", msg: "", name: "Name", value: "" },
+      { param: "description", msg: "", name: "Description", value: "" },
+      { param: "image", msg: "", name: "Image", value: "" },
+      { param: "price", msg: "", name: "Price", value: "" },
+      { param: "numberRooms", msg: "", name: "Number of rooms", value: "" },
+    ])
     if (flatId) {
       fetchData()
     } else {
-      setForm(initialForm)
       setTimeRanges([])
       setIsFormFlipped(false)
     }
-  }, [flatId, initialForm])
+  }, [flatId])
 
   const onFlip = (
     event:
