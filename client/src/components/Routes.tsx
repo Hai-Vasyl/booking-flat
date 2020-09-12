@@ -5,11 +5,12 @@ import CreateEditVoucher from "../pages/CreateEditVoucher"
 import Auth from "../pages/Auth"
 import DetailsFlat from "../pages/DetailsFlat"
 import DetailsVoucher from "../pages/DetailsVoucher"
-import OrderBookings from "../pages/OrderBookings"
+import Cart from "../pages/Cart"
 import User from "../pages/User"
 import Filter from "../pages/Filter"
-import Find from "../pages/Find"
+import FindOrders from "../pages/FindOrders"
 import Navbar from "../components/Navbar"
+// import Orders from "../pages/Orders"
 import {
   BrowserRouter as Router,
   Route,
@@ -41,9 +42,10 @@ const Routes: React.FC = () => {
           <Switch>
             <Route exact path='/' component={Main} />
             <Route path='/create-flat' component={CreateEditFlat} />
-            <Route path='/orders' component={OrderBookings} />
+            <Route path='/cart' component={Cart} />
             <Route path='/filter' component={Filter} />
-            <Route path='/find-buyer' component={Find} />
+            <Route path='/find-buyer' component={FindOrders} />
+            <Route path='/orders' component={FindOrders} />
 
             <Route path='/edit-flat/:flatId' component={CreateEditFlat} />
             <Route path='/create-voucher/:id' component={CreateEditVoucher} />
@@ -60,8 +62,9 @@ const Routes: React.FC = () => {
           <Switch>
             <Route exact path='/' component={Main} />
             <Route path='/create-flat' component={CreateEditFlat} />
-            <Route path='/orders' component={OrderBookings} />
+            <Route path='/cart' component={Cart} />
             <Route path='/filter' component={Filter} />
+            <Route path='/orders' component={FindOrders} />
 
             <Route path='/edit-flat/:flatId' component={CreateEditFlat} />
             <Route path='/create-voucher/:id' component={CreateEditVoucher} />
@@ -78,7 +81,7 @@ const Routes: React.FC = () => {
       ) : (
         <Switch>
           <Route exact path='/' component={Main} />
-          <Route path='/orders' component={OrderBookings} />
+          <Route path='/cart' component={Cart} />
           <Route path='/filter' component={Filter} />
           <Route path='/auth' component={Auth} />
 

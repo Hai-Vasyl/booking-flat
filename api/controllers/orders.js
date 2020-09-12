@@ -26,13 +26,48 @@ exports.orders_get = async (req, res) => {
     const { searchedText } = req.body
 
     const query = searchedText ? { $text: { $search: searchedText } } : {}
-    const orders = await Order.find(query)
-      .populate({ path: "voucher" })
-      .populate({ path: "voucher", select: "image" })
+    const orders = await Order.find(query).populate({
+      path: "voucher",
+      select: "image",
+    })
     const bookings = await await Booking.find(query).populate({
       path: "apartment",
       select: "image",
     })
+
+    res.json({ orders, bookings })
+  } catch (error) {
+    res.status(400).json(`Order creating error: ${error.message}`)
+  }
+}
+
+exports.orders_byowner_get = async (req, res) => {
+  try {
+    const { userId } = req
+
+    const reduceUnmatched = (collection) => {
+      let newCollection = []
+      collection.forEach((item) => {
+        if (item.apartment !== null) {
+          newCollection.push(item)
+        }
+      })
+      return newCollection
+    }
+
+    let bookings = await Booking.find().populate({
+      path: "apartment",
+      select: "owner image",
+      match: { owner: userId },
+    })
+    let orders = await Order.find().populate({
+      path: "voucher",
+      select: "owner image",
+      match: { owner: userId },
+    })
+
+    bookings = reduceUnmatched(bookings)
+    orders = reduceUnmatched(orders)
 
     res.json({ orders, bookings })
   } catch (error) {

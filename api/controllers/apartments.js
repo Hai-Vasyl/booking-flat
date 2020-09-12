@@ -180,3 +180,36 @@ exports.apartment_details_get = async (req, res) => {
     res.status(400).json(`Apartment details getting error: ${error.message}`)
   }
 }
+
+exports.apratments_unbooked_get = async (req, res) => {
+  try {
+    const { settlement, eviction } = req.body
+    let apartments = await Apartment.find()
+      .populate({
+        path: "timeRanges",
+        select: "settlement eviction",
+        match: {
+          settlement: { $gte: settlement },
+          eviction: { $lte: eviction },
+          bookedStatus: false,
+        },
+      })
+      .select("-description -vouchers")
+
+    const reduceCollection = () => {
+      let newCollection = []
+      apartments.forEach((item) => {
+        if (item.timeRanges.length) {
+          newCollection.push(item)
+        }
+      })
+      return newCollection
+    }
+
+    apartments = reduceCollection(apartments)
+
+    res.json(apartments)
+  } catch (error) {
+    res.status(400).json(`Apartments unbooked getting error: ${error.message}`)
+  }
+}

@@ -15,7 +15,7 @@ import {
 import { TOGGLE_POPUP_MENU } from "../redux/menu/menuTypes"
 import axios from "axios"
 
-const OrderBookings = () => {
+const Cart: React.FC = () => {
   const {
     orders: { bookings, orderList },
     menu: { popup },
@@ -317,4 +317,4 @@ const OrderBookings = () => {
   )
 }
 
-export default OrderBookings
+export default Cart

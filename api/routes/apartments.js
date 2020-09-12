@@ -8,6 +8,7 @@ const {
   apartment_delete,
   apartments_get,
   apartment_details_get,
+  apratments_unbooked_get,
 } = require("../controllers/apartments")
 
 router.post("/create", auth, apartment_create)
@@ -16,5 +17,6 @@ router.get("/get/:apartmentId", apartment_get)
 router.delete("/delete/:apartmentId", auth, apartment_delete)
 router.post("/get-filtered", apartments_get)
 router.get("/get-details/:apartmentId", apartment_details_get)
+router.post("/get-unbooked", apratments_unbooked_get)
 
 module.exports = router
