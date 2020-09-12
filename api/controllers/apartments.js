@@ -195,6 +195,7 @@ exports.apratments_unbooked_get = async (req, res) => {
         },
       })
       .select("-description -vouchers")
+      .populate({ path: "owner", select: "firstname lastname ava" })
 
     const reduceCollection = () => {
       let newCollection = []

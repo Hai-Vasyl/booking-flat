@@ -45,10 +45,10 @@ exports.orders_byowner_get = async (req, res) => {
   try {
     const { userId } = req
 
-    const reduceUnmatched = (collection) => {
+    const reduceUnmatched = (collection, isBooking) => {
       let newCollection = []
       collection.forEach((item) => {
-        if (item.apartment !== null) {
+        if (item.apartment || item.voucher) {
           newCollection.push(item)
         }
       })
@@ -66,8 +66,8 @@ exports.orders_byowner_get = async (req, res) => {
       match: { owner: userId },
     })
 
-    bookings = reduceUnmatched(bookings)
-    orders = reduceUnmatched(orders)
+    bookings = reduceUnmatched(bookings, true)
+    orders = reduceUnmatched(orders, false)
 
     res.json({ orders, bookings })
   } catch (error) {

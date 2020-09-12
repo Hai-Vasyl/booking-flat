@@ -15,7 +15,7 @@ const BookingItem: React.FC<Booking> = ({
   email,
 }) => {
   return (
-    <div key={_id} className='booking-item'>
+    <div className='booking-item'>
       <Link
         to={`/details/flat/${apartment._id}`}
         className='booking-item__container-img'

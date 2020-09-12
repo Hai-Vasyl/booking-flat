@@ -9,8 +9,8 @@ import Cart from "../pages/Cart"
 import User from "../pages/User"
 import Filter from "../pages/Filter"
 import FindOrders from "../pages/FindOrders"
+import ReportGeneration from "../pages/ReportGeneration"
 import Navbar from "../components/Navbar"
-// import Orders from "../pages/Orders"
 import {
   BrowserRouter as Router,
   Route,
@@ -46,6 +46,7 @@ const Routes: React.FC = () => {
             <Route path='/filter' component={Filter} />
             <Route path='/find-buyer' component={FindOrders} />
             <Route path='/orders' component={FindOrders} />
+            <Route path='/report' component={ReportGeneration} />
 
             <Route path='/edit-flat/:flatId' component={CreateEditFlat} />
             <Route path='/create-voucher/:id' component={CreateEditVoucher} />

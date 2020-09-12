@@ -1442,3 +1442,17 @@ $transitions: (
     }
   }
 }
+
+.date-panel {
+  // width: 900px;
+  // max-width: 100%;
+  // margin: 0 auto;
+  padding: 20px 0;
+  border-bottom: 1px solid getColor(secondary);
+  &__container {
+    display: flex;
+  }
+  &__btn-submit {
+    padding: 0px 12px;
+  }
+}

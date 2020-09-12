@@ -13,8 +13,9 @@ const OrderItem: React.FC<Order> = ({
   lastname,
   email,
 }) => {
+  console.log(_id)
   return (
-    <div key={_id} className='order-item booking-item'>
+    <div className='order-item booking-item'>
       <Link
         to={`/details/voucher/${voucher._id}`}
         className='order-item__container-img booking-item__container-img'

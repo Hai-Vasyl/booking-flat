@@ -197,15 +197,16 @@ const CreateEditFlat: React.FC = () => {
   const handleChangeDate = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
 
+    if (new Date(value) <= new Date()) {
+      return setMessage(`Wrong ${name} date!`)
+    } else {
+      setMessage("")
+    }
+
     setTimeForm(
       timeForm.map((item) => {
         if (item.param === name) {
-          if (new Date(value) <= new Date()) {
-            setMessage(`Wrong ${name} date!`)
-          } else {
-            setMessage("")
-            return { ...item, value }
-          }
+          return { ...item, value }
         }
         return item
       })

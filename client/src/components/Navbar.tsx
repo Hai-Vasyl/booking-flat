@@ -2,7 +2,7 @@ import React from "react"
 import { NavLink } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import { RootStore } from "../redux/store"
-import { BsBootstrap, BsStar } from "react-icons/bs"
+import { BsBootstrap, BsStar, BsClipboardData } from "react-icons/bs"
 import {
   AiOutlineHome,
   AiOutlinePlusSquare,
@@ -68,14 +68,24 @@ const Navbar: React.FC = () => {
             <span className='link__name'>Cart</span>
           </NavLink>
           {userData.user && userData.user.typeUser === "admin" && (
-            <NavLink
-              to='/find-buyer'
-              className='link'
-              activeClassName='link--active'
-            >
-              <AiOutlineSearch className='link__icon' />
-              <span className='link__name'>Find</span>
-            </NavLink>
+            <>
+              <NavLink
+                to='/find-buyer'
+                className='link'
+                activeClassName='link--active'
+              >
+                <AiOutlineSearch className='link__icon' />
+                <span className='link__name'>Find</span>
+              </NavLink>
+              <NavLink
+                to='/report'
+                className='link'
+                activeClassName='link--active'
+              >
+                <BsClipboardData className='link__icon' />
+                <span className='link__name'>Report</span>
+              </NavLink>
+            </>
           )}
           {userData.token ? (
             <>

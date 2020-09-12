@@ -17,6 +17,6 @@ router.get("/get/:apartmentId", apartment_get)
 router.delete("/delete/:apartmentId", auth, apartment_delete)
 router.post("/get-filtered", apartments_get)
 router.get("/get-details/:apartmentId", apartment_details_get)
-router.post("/get-unbooked", apratments_unbooked_get)
+router.post("/get-unbooked", auth, apratments_unbooked_get)
 
 module.exports = router
