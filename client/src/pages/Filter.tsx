@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useCallback } from "react"
 import { useLocation, useHistory } from "react-router-dom"
 import axios from "axios"
 import { Link } from "react-router-dom"
@@ -102,7 +102,6 @@ const Filter: React.FC = () => {
         setData(res.data)
       } catch (error) {}
     }
-
     fetchData()
   }, [location])
 
@@ -110,7 +109,6 @@ const Filter: React.FC = () => {
     const compare = (firstItem: CompareItem, secondItem: CompareItem) => {
       const item1 = firstItem[sortType]
       const item2 = secondItem[sortType]
-
       if (item1 > item2) {
         return sortBehaviour ? 1 : -1
       } else if (item1 < item2) {
@@ -120,7 +118,7 @@ const Filter: React.FC = () => {
       }
     }
 
-    setData((prevData) => prevData.sort(compare))
+    setData((prevData) => [...prevData].sort(compare))
   }, [sortType, sortBehaviour])
 
   const handleChangeField = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -483,7 +481,7 @@ const Filter: React.FC = () => {
                 className='sort-panel__radio'
                 checked={sortBehaviour}
               />
-              <span className='sort-panel__name'>Descending</span>
+              <span className='sort-panel__name'>Ascending</span>
             </label>
             <label className='sort-panel__label-radio'>
               <input
@@ -492,7 +490,7 @@ const Filter: React.FC = () => {
                 className='sort-panel__radio'
                 checked={!sortBehaviour}
               />
-              <span className='sort-panel__name'>Ascending</span>
+              <span className='sort-panel__name'>Descending</span>
             </label>
           </form>
           <select

@@ -122,36 +122,71 @@ const ReportGeneration: React.FC = () => {
 
   const flats = data.map((item) => {
     return (
-      <div key={item.id}>
-        <div>
-          <span>Rooms: {item.numberRooms}</span>-
-          <span>Apartments: {item.nodes.length}</span>
+      <div key={item.id} className='flat-unbooked'>
+        <div className='flat-unbooked__title'>
+          <span className='flat-unbooked__title-name'>
+            Rooms: {item.numberRooms}
+          </span>
+          -
+          <span className='flat-unbooked__title-name'>
+            Apartments: {item.nodes.length}
+          </span>
         </div>
-        <div>
+        <div className='flat-unbooked__container-flats'>
           {item.nodes.map((elem) => {
             return (
-              <div key={elem._id}>
-                <Link to={`/details/flat/${elem._id}`}>
-                  <img src={elem.image} alt='flatImg' />
-                  <span>{elem.price}</span>
+              <div key={elem._id} className='flat-unbooked__flat'>
+                <Link
+                  to={`/details/flat/${elem._id}`}
+                  className='flat-unbooked__container-img'
+                >
+                  <img
+                    src={elem.image}
+                    alt='flatImg'
+                    className='flat-unbooked__img'
+                  />
+                  <span className='flat-unbooked__price'>{elem.price}</span>
                 </Link>
-                <div>
-                  <Link to={`/details/flat/${elem._id}`}>{elem.name}</Link>
-                  <span>Number of rooms: {elem.numberRooms}</span>
-                  <Link to={`/user/${elem.owner._id}`}>
-                    <span>
-                      <img src={elem.image} alt='avaImg' />
+                <div className='flat-unbooked__info'>
+                  <Link
+                    className='flat-unbooked__name'
+                    to={`/details/flat/${elem._id}`}
+                  >
+                    {elem.name}
+                  </Link>
+                  <span className='flat-unbooked__numberRooms'>
+                    Number of rooms: {elem.numberRooms}
+                  </span>
+                  <Link
+                    className='flat-unbooked__owner'
+                    to={`/user/${elem.owner._id}`}
+                  >
+                    <span className='flat-unbooked__avatart'>
+                      <img
+                        className='flat-unbooked__ava-img'
+                        src={elem.owner.ava}
+                        alt='avaImg'
+                      />
                     </span>
-                    <span>{elem.owner.firstname}</span>
-                    <span>{elem.owner.lastname}</span>
+                    <span className='flat-unbooked__user-name'>
+                      {elem.owner.firstname}
+                    </span>
+                    <span className='flat-unbooked__user-name'>
+                      {elem.owner.lastname}
+                    </span>
                   </Link>
                 </div>
-                <div>
+                <div className='flat-unbooked__container-dates'>
                   {elem.timeRanges.map((item) => {
                     return (
-                      <div key={item._id}>
-                        <span>{item.settlement}</span>-
-                        <span>{item.eviction}</span>
+                      <div className='flat-unbooked__date-slot' key={item._id}>
+                        <span className='flat-unbooked__date'>
+                          {item.settlement.slice(0, 10)}
+                        </span>
+                        -
+                        <span className='flat-unbooked__date'>
+                          {item.eviction.slice(0, 10)}
+                        </span>
                       </div>
                     )
                   })}
