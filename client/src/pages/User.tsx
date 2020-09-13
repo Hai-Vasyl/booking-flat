@@ -4,6 +4,8 @@ import axios from "axios"
 import { BsCheck, BsGear, BsPencilSquare, BsX } from "react-icons/bs"
 import { Link } from "react-router-dom"
 import { AiOutlineWarning } from "react-icons/ai"
+import { useSelector } from "react-redux"
+import { RootStore } from "../redux/store"
 
 interface UserParam {
   userId: string
@@ -35,6 +37,33 @@ interface DataProps {
 }
 
 const User = () => {
+  const {
+    auth: { userData },
+  } = useSelector((state: RootStore) => state)
+  const initialForm = [
+    {
+      param: "firstname",
+      msg: "",
+      value: userData.user ? userData.user.firstname : "",
+      name: "First name",
+      type: "text",
+    },
+    {
+      param: "lastname",
+      msg: "",
+      value: userData.user ? userData.user.lastname : "",
+      name: "Last name",
+      type: "text",
+    },
+    {
+      param: "email",
+      msg: "",
+      value: userData.user ? userData.user.email : "",
+      name: "Email address",
+      type: "email",
+    },
+  ]
+
   const [data, setData] = useState<DataProps>({
     apartments: [],
     user: {
@@ -48,24 +77,7 @@ const User = () => {
     },
   })
   const { userId } = useParams<UserParam>()
-  const [form, setForm] = useState([
-    {
-      param: "firstname",
-      msg: "",
-      value: "",
-      name: "First name",
-      type: "text",
-    },
-    { param: "lastname", msg: "", value: "", name: "Last name", type: "text" },
-    {
-      param: "email",
-      msg: "",
-      value: "",
-      name: "Email address",
-      type: "email",
-    },
-  ])
-
+  const [form, setForm] = useState(initialForm)
   const [image, setImage] = useState("")
   const [flipPage, setFlipPage] = useState(true)
 
@@ -90,10 +102,44 @@ const User = () => {
     setImage(event.target.value)
   }
 
-  const handleSubmitImage = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    event:
+      | React.FormEvent<HTMLFormElement>
+      | React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    isImage: boolean
+  ) => {
     try {
       event.preventDefault()
-      console.log(image)
+
+      let isEmpty = false
+      if (isImage && !image) {
+        return
+      } else if (!isImage) {
+        setForm((prevForm) =>
+          prevForm.map((item) => {
+            if (!item.value) {
+              isEmpty = true
+              return { ...item, msg: "Fill in this field!" }
+            }
+            return item
+          })
+        )
+      }
+      if (isEmpty) {
+        return
+      }
+
+      const res = await axios({
+        url: "/auth/user-update",
+        method: "post",
+        data: isImage ? { ava: image } : {},
+        headers: userData && {
+          Authorization: `Basic ${userData.token}`,
+        },
+      })
+
+      setImage("")
+      console.log(res.data)
     } catch (error) {}
   }
 
@@ -109,11 +155,9 @@ const User = () => {
     )
   }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    try {
-      event.preventDefault()
-      console.log(form)
-    } catch (error) {}
+  const handleReset = () => {
+    setFlipPage(true)
+    setForm(initialForm)
   }
 
   const fields = form.map((item) => {
@@ -147,15 +191,22 @@ const User = () => {
               alt='userAva'
             />
           </div>
-          <form className='user__img-form' onSubmit={handleSubmitImage}>
+          <form
+            className='user__img-form'
+            onSubmit={(event) => handleSubmit(event, true)}
+          >
             <input
               className=' field__input'
               type='text'
               value={image}
               onChange={handleChangeImage}
-              placeholder='Image addresss'
+              placeholder='Image address'
             />
-            <button className='user__img-btn btn btn-primary'>
+            <button
+              className={`user__img-btn btn btn-primary ${
+                !image && "btn-disabled"
+              }`}
+            >
               <BsPencilSquare className='btn__icon' />
               <span className='btn__name'>Image</span>
             </button>
@@ -172,30 +223,35 @@ const User = () => {
                 <span>Email: {data.user.email}</span>
                 <span>Last updated: {data.user.date.slice(0, 10)}</span>
               </p>
+              <button
+                className={`user__btn-flip btn btn-simple ${
+                  !flipPage && "user__btn-flip--disabled"
+                }`}
+                onClick={() => setFlipPage((prevFlipPage) => !prevFlipPage)}
+              >
+                <BsGear className='btn__icon' />
+              </button>
             </div>
 
             <div className={`user__page ${!flipPage && "user__page--open"}`}>
-              <form onSubmit={handleSubmit}>{fields}</form>
+              <form onSubmit={(event) => handleSubmit(event, false)}>
+                {fields}
+                <button className='btn-handler'></button>
+              </form>
               <div className='user__btns'>
-                <button className='btn btn-simple'>
+                <button className='btn btn-simple' onClick={handleReset}>
                   <BsX className='btn__icon' />
                   <span className='btn__name'>Cancel</span>
                 </button>
-                <button className='btn btn-primary'>
+                <button
+                  className='btn btn-primary'
+                  onClick={(event) => handleSubmit(event, false)}
+                >
                   <BsCheck className='btn__icon' />
                   <span className='btn__name'>Apply</span>
                 </button>
               </div>
             </div>
-            <button
-              className={`user__btn-flip btn btn-simple ${
-                !flipPage && "user__btn-flip--disabled"
-              }`}
-              onClick={() => setFlipPage((prevFlipPage) => !prevFlipPage)}
-            >
-              <BsGear className='btn__icon' />
-              <span className='btn__name'>Edit info</span>
-            </button>
           </div>
 
           <div className='user__flats'>
@@ -232,7 +288,7 @@ const User = () => {
                               alt='voucherImg'
                             />
                           </span>
-                          <span>{item.name}</span>
+                          <span>{elem.name}</span>
                         </Link>
                       )
                     })}

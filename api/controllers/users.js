@@ -90,3 +90,16 @@ exports.user_details_get = async (req, res) => {
     res.json(`User details getting error: ${error.message}`)
   }
 }
+
+exports.user_update = async (req, res) => {
+  try {
+    const { userId } = req
+
+    const date = new Date()
+    await User.findByIdAndUpdate(userId, { ...req.body, date })
+
+    res.json(date)
+  } catch (error) {
+    res.json(`User updating error: ${error.message}`)
+  }
+}

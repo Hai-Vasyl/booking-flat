@@ -147,6 +147,18 @@ $transitions: (
   border-color: getColor(secondary);
   color: getColor(primary);
 }
+.btn-disabled {
+  border-color: transparent;
+  background-color: getColor(bg-dark);
+  color: getColor(primary);
+  color: getColor(accent);
+  &:hover {
+    box-shadow: none;
+  }
+  &:active {
+    transform: none;
+  }
+}
 
 .field-date {
   flex: 1;
@@ -1319,6 +1331,7 @@ $transitions: (
 .user {
   display: flex;
   width: 100% !important;
+  align-items: flex-start;
   &__img-side {
     border: 1px solid getColor(secondary);
     border-right: none;
@@ -1356,13 +1369,22 @@ $transitions: (
     display: none;
     font-size: 1.1em;
     padding: 15px;
+    min-height: 25vh;
+    position: relative;
     &--open {
       display: block;
     }
   }
   &__btn-flip {
-    margin: 0px 15px;
     display: block;
+    display: flex;
+    padding: 0;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    border-radius: 50%;
+    top: 15px;
+    right: 15px;
     &--disabled {
       display: none;
     }
@@ -1381,7 +1403,6 @@ $transitions: (
     display: flex;
   }
   &__flats {
-    border: 1px solid getColor(secondary);
   }
   &__container-flat {
   }
@@ -1390,7 +1411,10 @@ $transitions: (
   &__vouchers {
     height: 30vh;
     overflow-y: auto;
+    padding: 15px;
     @extend %scrollbar;
+    background-color: getColor(main);
+    box-shadow: inset getShadows(light);
   }
 }
 
@@ -1399,12 +1423,15 @@ $transitions: (
   align-items: center;
   text-decoration: none;
   color: getColor(primary);
-  padding: 5px;
-  border: 1px solid getColor(secondary);
+  padding: 10px;
+  border: 1px solid transparent;
+  border-top-color: getColor(secondary);
+  border-bottom-color: getColor(secondary);
   &__container-img {
     width: 80px;
     height: 80px;
     display: flex;
+    margin-right: 10px;
   }
   &__img {
     width: 100%;
@@ -1415,8 +1442,21 @@ $transitions: (
 }
 
 .voucher-user {
+  background-color: getColor(accent);
+  margin-bottom: 0.5em;
+  border-radius: 5px;
+  padding: 5px;
+  border-color: getColor(secondary);
+  &:last-child {
+    margin-bottom: 0;
+  }
   &__container-img {
     border-radius: 50%;
+    padding: 3px;
+    border: 1px solid getColor(secondary);
+
+    width: 55px;
+    height: 55px;
   }
   &__img {
     border-radius: 50%;

@@ -4,7 +4,9 @@ const {
   user_register,
   user_login,
   user_details_get,
+  user_update,
 } = require("../controllers/users")
+const auth = require("../middlewares/auth.middleware")
 
 const router = Router()
 
@@ -37,5 +39,6 @@ router.post(
 )
 
 router.get("/user-details-get/:userId", user_details_get)
+router.post("/user-update", auth, user_update)
 
 module.exports = router
