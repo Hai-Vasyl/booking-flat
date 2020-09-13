@@ -45,7 +45,7 @@ const ReportGeneration: React.FC = () => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target
-
+    setMessage("")
     setDataRange({ ...dataRange, [name]: value })
   }
 
@@ -68,7 +68,6 @@ const ReportGeneration: React.FC = () => {
           Authorization: `Basic ${userData.token}`,
         },
       })
-      console.log(res.data)
 
       let flats: UnorderedFlat[] = res.data
       let sortedFlats: SortedFlat[] = []
@@ -102,7 +101,6 @@ const ReportGeneration: React.FC = () => {
         }
       })
 
-      console.log(sortedFlats)
       setData(sortedFlats.sort(compare))
     } catch (error) {}
   }
@@ -198,7 +196,7 @@ const ReportGeneration: React.FC = () => {
       </div>
     )
   })
-  console.log(data)
+
   return (
     <div className='wrapper'>
       <div className='date-panel'>

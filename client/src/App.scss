@@ -1316,22 +1316,114 @@ $transitions: (
   }
 }
 
-@media (max-width: 970px) {
-  .form-flat {
-    &__date-fields {
-      flex-direction: column;
-    }
-    &__btn-add-time {
-      width: 100%;
+.user {
+  display: flex;
+  width: 100% !important;
+  &__img-side {
+    border: 1px solid getColor(secondary);
+    border-right: none;
+    width: 330px;
+    padding: 15px;
+  }
+  &__content-side {
+    border: 1px solid getColor(secondary);
+    flex: 1;
+  }
+  &__avatar {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    border: 1px solid getColor(secondary);
+    padding: 10px;
+    margin-bottom: 1em;
+  }
+  &__ava-img {
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  &__img-form {
+  }
+  &__img-btn {
+    margin-left: auto;
+    margin-top: 15px;
+  }
+  &__pages {
+  }
+  &__page {
+    display: none;
+    font-size: 1.1em;
+    padding: 15px;
+    &--open {
+      display: block;
     }
   }
-  .field {
-    &__date {
-      border-right-color: getColor(secondary);
+  &__btn-flip {
+    margin: 0px 15px;
+    display: block;
+    &--disabled {
+      display: none;
     }
+  }
+  &__fullname {
+    font-size: 2.6em;
+    margin-bottom: 0.3em;
+  }
+  &__info {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5em 0;
+    line-height: 1.5em;
+  }
+  &__btns {
+    display: flex;
+  }
+  &__flats {
+    border: 1px solid getColor(secondary);
+  }
+  &__container-flat {
+  }
+  &__flat-link {
+  }
+  &__vouchers {
+    height: 30vh;
+    overflow-y: auto;
+    @extend %scrollbar;
   }
 }
-@media (max-width: 850px) {
+
+.flat-user {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: getColor(primary);
+  padding: 5px;
+  border: 1px solid getColor(secondary);
+  &__container-img {
+    width: 80px;
+    height: 80px;
+    display: flex;
+  }
+  &__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+.voucher-user {
+  &__container-img {
+    border-radius: 50%;
+  }
+  &__img {
+    border-radius: 50%;
+  }
+}
+
+@media (max-width: 1050px) {
   .nav {
     &__drop-menu {
       width: 200px;
@@ -1418,6 +1510,24 @@ $transitions: (
       font-size: 1.7em;
     }
   }
+}
+
+@media (max-width: 970px) {
+  .form-flat {
+    &__date-fields {
+      flex-direction: column;
+    }
+    &__btn-add-time {
+      width: 100%;
+    }
+  }
+  .field {
+    &__date {
+      border-right-color: getColor(secondary);
+    }
+  }
+}
+@media (max-width: 850px) {
   .form-flat {
     flex-direction: column-reverse;
     &__container {
@@ -1561,7 +1671,6 @@ $transitions: (
     }
     &__btn-go {
       width: 100%;
-
       &-left {
         width: 100%;
       }
