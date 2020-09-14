@@ -13,7 +13,6 @@ const OrderItem: React.FC<Order> = ({
   lastname,
   email,
 }) => {
-  console.log(_id)
   return (
     <div className='order-item booking-item'>
       <Link

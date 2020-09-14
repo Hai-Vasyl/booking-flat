@@ -184,13 +184,14 @@ exports.apartment_details_get = async (req, res) => {
 exports.apratments_unbooked_get = async (req, res) => {
   try {
     const { settlement, eviction } = req.body
+
     let apartments = await Apartment.find()
       .populate({
         path: "timeRanges",
         select: "settlement eviction",
         match: {
-          settlement: { $gte: settlement },
-          eviction: { $lte: eviction },
+          settlement: settlement ? { $gte: settlement } : { $exists: true },
+          eviction: eviction ? { $lte: eviction } : { $exists: true },
           bookedStatus: false,
         },
       })

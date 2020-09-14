@@ -10,7 +10,6 @@ import {
   CHANGE_QUANTITY_ORDERS,
   RESET_ORDERS,
 } from "./ordersTypes"
-import { AiOutlineOrderedList } from "react-icons/ai"
 
 interface InitialState {
   bookings: AddCartBookingPayload[]

@@ -59,7 +59,6 @@ const Auth: React.FC = () => {
   }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.name)
     setForm(
       form.map((item) => {
         if (item.param === event.target.name) {

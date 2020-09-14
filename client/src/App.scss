@@ -1181,12 +1181,12 @@ $transitions: (
 }
 
 .date-panel {
-  padding-bottom: 1em;
+  padding-bottom: 1.5em;
   &__container {
     display: flex;
   }
-  &__btn-submit {
-    padding: 0px 12px;
+  &__date-field {
+    border-right-color: getColor(secondary);
   }
 }
 
@@ -1330,7 +1330,7 @@ $transitions: (
 
 .user {
   display: flex;
-  width: 100% !important;
+  width: 100%;
   align-items: flex-start;
   &__img-side {
     border: 1px solid getColor(secondary);
@@ -1348,7 +1348,6 @@ $transitions: (
     border-radius: 50%;
     border: 1px solid getColor(secondary);
     padding: 10px;
-    margin-bottom: 1em;
   }
   &__ava-img {
     border-radius: 50%;
@@ -1358,6 +1357,7 @@ $transitions: (
     display: block;
   }
   &__img-form {
+    margin-top: 1em;
   }
   &__img-btn {
     margin-left: auto;
@@ -1415,6 +1415,9 @@ $transitions: (
     @extend %scrollbar;
     background-color: getColor(main);
     box-shadow: inset getShadows(light);
+    &--close {
+      display: none;
+    }
   }
 }
 
@@ -1426,7 +1429,6 @@ $transitions: (
   padding: 10px;
   border: 1px solid transparent;
   border-top-color: getColor(secondary);
-  border-bottom-color: getColor(secondary);
   &__container-img {
     width: 80px;
     height: 80px;
@@ -1460,6 +1462,22 @@ $transitions: (
   }
   &__img {
     border-radius: 50%;
+  }
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  position: relative;
+  &__icon {
+    position: absolute;
+    width: 40px;
+    height: 34px;
+    pointer-events: none;
+    border-left: none;
+    padding: 5px;
+    right: 0;
+    color: getColor(secondary);
   }
 }
 
@@ -1631,21 +1649,21 @@ $transitions: (
       padding: 0px;
     }
   }
-}
-
-.search {
-  display: flex;
-  align-items: center;
-  position: relative;
-  &__icon {
-    position: absolute;
-    width: 40px;
-    height: 34px;
-    pointer-events: none;
-    border-left: none;
-    padding: 5px;
-    right: 0;
-    color: getColor(secondary);
+  .user {
+    flex-direction: column;
+    &__img-side {
+      border: 1px solid getColor(secondary);
+      width: 100%;
+    }
+    &__content-side {
+      border: 1px solid getColor(secondary);
+      border-top-color: transparent;
+      flex: none;
+      width: 100%;
+    }
+    &__avatar {
+      margin: 0 auto;
+    }
   }
 }
 
@@ -1769,6 +1787,18 @@ $transitions: (
       margin-bottom: 10px;
     }
     &__field {
+    }
+  }
+  .user {
+    &__avatar {
+      width: 200px;
+      height: 200px;
+      padding: 5px;
+    }
+    &__btn-flip {
+      width: 35px;
+      height: 35px;
+      font-size: 0.8em;
     }
   }
 }

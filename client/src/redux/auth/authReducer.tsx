@@ -7,6 +7,7 @@ import {
   CLEAR_ERROR_AUTH,
   SET_AUTH,
   RESET_AUTH,
+  SET_UPDATED_AUTH,
   AuthReducerTypes,
 } from "./authTypes"
 
@@ -79,6 +80,24 @@ const authReducer = (
     case RESET_AUTH:
       localStorage.removeItem("auth")
       return initialState
+    case SET_UPDATED_AUTH:
+      const { email, firstname, lastname, date, ava } = action.payload
+      const newUserData = {
+        ...state.userData,
+        user: {
+          ...state.userData.user,
+          email,
+          firstname,
+          lastname,
+          date,
+          ava,
+        },
+      }
+      localStorage.setItem("auth", JSON.stringify(newUserData))
+      return {
+        ...state,
+        userData: newUserData,
+      }
     default:
       return state
   }

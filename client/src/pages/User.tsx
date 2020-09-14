@@ -4,8 +4,9 @@ import axios from "axios"
 import { BsCheck, BsGear, BsPencilSquare, BsX } from "react-icons/bs"
 import { Link } from "react-router-dom"
 import { AiOutlineWarning } from "react-icons/ai"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import { RootStore } from "../redux/store"
+import { SET_UPDATED_AUTH } from "../redux/auth/authTypes"
 
 interface UserParam {
   userId: string
@@ -37,9 +38,12 @@ interface DataProps {
 }
 
 const User = () => {
+  const { userId } = useParams<UserParam>()
   const {
     auth: { userData },
   } = useSelector((state: RootStore) => state)
+  const isAuthUserPage = userId === (userData.user && userData.user._id)
+  const dispatch = useDispatch()
   const initialForm = [
     {
       param: "firstname",
@@ -76,7 +80,7 @@ const User = () => {
       typeUser: "",
     },
   })
-  const { userId } = useParams<UserParam>()
+
   const [form, setForm] = useState(initialForm)
   const [image, setImage] = useState("")
   const [flipPage, setFlipPage] = useState(true)
@@ -90,13 +94,16 @@ const User = () => {
           data: null,
         })
 
-        console.log(res.data)
-        setData(res.data)
+        const dataProps = isAuthUserPage
+          ? { apartments: res.data.apartments }
+          : res.data
+
+        setData((prevData) => ({ ...prevData, ...dataProps }))
       } catch (error) {}
     }
 
     fetchData()
-  }, [userId])
+  }, [userId, isAuthUserPage])
 
   const handleChangeImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setImage(event.target.value)
@@ -115,8 +122,8 @@ const User = () => {
       if (isImage && !image) {
         return
       } else if (!isImage) {
-        setForm((prevForm) =>
-          prevForm.map((item) => {
+        setForm(
+          form.map((item) => {
             if (!item.value) {
               isEmpty = true
               return { ...item, msg: "Fill in this field!" }
@@ -129,17 +136,32 @@ const User = () => {
         return
       }
 
+      const [firstname, lastname, email] = form
+      const dataPayload = {
+        firstname: firstname.value,
+        lastname: lastname.value,
+        email: email.value,
+      }
+
       const res = await axios({
         url: "/auth/user-update",
         method: "post",
-        data: isImage ? { ava: image } : {},
+        data: isImage ? { ava: image } : { ...dataPayload },
         headers: userData && {
           Authorization: `Basic ${userData.token}`,
         },
       })
 
+      dispatch({
+        type: SET_UPDATED_AUTH,
+        payload: {
+          ...dataPayload,
+          ava: image ? image : userData.user.ava,
+          date: res.data,
+        },
+      })
       setImage("")
-      console.log(res.data)
+      setFlipPage(true)
     } catch (error) {}
   }
 
@@ -180,6 +202,14 @@ const User = () => {
     )
   })
 
+  const user = {
+    ava: isAuthUserPage ? userData.user.ava : data.user.ava,
+    firstname: isAuthUserPage ? userData.user.firstname : data.user.firstname,
+    lastname: isAuthUserPage ? userData.user.lastname : data.user.lastname,
+    email: isAuthUserPage ? userData.user.email : data.user.email,
+    date: isAuthUserPage ? userData.user.date : data.user.date,
+  }
+
   return (
     <div className='wrapper'>
       <div className='user'>
@@ -187,50 +217,54 @@ const User = () => {
           <div className='user__avatar'>
             <img
               className='user__ava-img'
-              src={image || data.user.ava}
+              src={image || user.ava}
               alt='userAva'
             />
           </div>
-          <form
-            className='user__img-form'
-            onSubmit={(event) => handleSubmit(event, true)}
-          >
-            <input
-              className=' field__input'
-              type='text'
-              value={image}
-              onChange={handleChangeImage}
-              placeholder='Image address'
-            />
-            <button
-              className={`user__img-btn btn btn-primary ${
-                !image && "btn-disabled"
-              }`}
+          {isAuthUserPage && (
+            <form
+              className='user__img-form'
+              onSubmit={(event) => handleSubmit(event, true)}
             >
-              <BsPencilSquare className='btn__icon' />
-              <span className='btn__name'>Image</span>
-            </button>
-          </form>
+              <input
+                className=' field__input'
+                type='text'
+                value={image}
+                onChange={handleChangeImage}
+                placeholder='Image address'
+              />
+              <button
+                className={`user__img-btn btn btn-primary ${
+                  !image && "btn-disabled"
+                }`}
+              >
+                <BsPencilSquare className='btn__icon' />
+                <span className='btn__name'>Image</span>
+              </button>
+            </form>
+          )}
         </div>
 
         <div className='user__content-side'>
           <div className='user__pages'>
             <div className={`user__page ${flipPage && "user__page--open"}`}>
               <h3 className='user__fullname'>
-                {data.user.firstname} {data.user.lastname}
+                {user.firstname} {user.lastname}
               </h3>
               <p className='user__info'>
-                <span>Email: {data.user.email}</span>
-                <span>Last updated: {data.user.date.slice(0, 10)}</span>
+                <span>Email: {user.email}</span>
+                <span>Last updated: {user.date.slice(0, 10)}</span>
               </p>
-              <button
-                className={`user__btn-flip btn btn-simple ${
-                  !flipPage && "user__btn-flip--disabled"
-                }`}
-                onClick={() => setFlipPage((prevFlipPage) => !prevFlipPage)}
-              >
-                <BsGear className='btn__icon' />
-              </button>
+              {isAuthUserPage && (
+                <button
+                  className={`user__btn-flip btn btn-simple ${
+                    !flipPage && "user__btn-flip--disabled"
+                  }`}
+                  onClick={() => setFlipPage((prevFlipPage) => !prevFlipPage)}
+                >
+                  <BsGear className='btn__icon' />
+                </button>
+              )}
             </div>
 
             <div className={`user__page ${!flipPage && "user__page--open"}`}>
@@ -273,7 +307,11 @@ const User = () => {
                       <span>{item.name}</span>
                     </Link>
                   </div>
-                  <div className='user__vouchers'>
+                  <div
+                    className={`user__vouchers ${
+                      !item.vouchers.length && "user__vouchers--close"
+                    }`}
+                  >
                     {item.vouchers.map((elem) => {
                       return (
                         <Link
